@@ -51,14 +51,13 @@ No build step, package manager, backend, database, CMS, external font, or third-
 ## Deployment Notes
 
 1. Create or open the GitHub Pages repository.
-2. Copy `site/index.html`, `site/manifest.json`, and `site/llms.txt` into the repository root.
+2. Copy these files into the repository root:
+   - `site/index.html`
+   - `site/manifest.json`
+   - `site/llms.txt`
 3. Commit and push to `main`.
 4. Enable GitHub Pages from the repository root if it is not already enabled.
-5. After the first commit, replace the placeholder snapshot commit `dfb4be4` with the real short commit SHA in:
-   - `index.html`
-   - `manifest.json`
-   - `llms.txt`
-6. Recommit the updated fingerprint.
+5. Visit `https://Ikalus1988.github.io`.
 
 ## Release Checklist
 
@@ -71,12 +70,12 @@ Before public launch:
 - [ ] Check mobile width around 375px for no horizontal overflow.
 - [ ] Verify `https://misakanet.org/journey/` fallback behavior after deployment.
 - [ ] Confirm whether `bot@misakanet.org` can receive email; if not, keep it marked as planned or replace it.
-- [ ] Replace snapshot commit placeholder with the real short SHA.
+- [x] Snapshot commit placeholder replaced with real SHA `a99fbd6`.
 
 ## Current Known Placeholders
 
 - `bot@misakanet.org` is currently marked as planned and should be verified before public launch.
-- Snapshot commit is currently `dfb4be4` and should be replaced with the real deployment commit SHA.
+- Snapshot commit fingerprint is `a99fbd6` (initial commit of this repo).
 - Two Case Studies are marked `Draft / Coming in Q3`.
 
 ## Design Documents

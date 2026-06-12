@@ -2,8 +2,8 @@
   "schema_version": "misaka-manifest-v2",
   "developer": "Ikalus1988",
   "core_identity": "Auditable Knowledge Systems Builder",
-  "last_updated": "2026-06-12",
-  "commit": "dfb4be4",
+  "last_updated": "2026-06-13",
+  "commit": "a99fbd6",
   "focus": [
     "Swarm Intelligence",
     "Industrial RAG",
@@ -29,8 +29,8 @@
       "status": "Active Sandbox"
     },
     "snapshot": {
-      "updated": "2026-06-12",
-      "commit": "dfb4be4"
+      "updated": "2026-06-13",
+      "commit": "a99fbd6"
     }
   },
   "secondary_projects": [
@@ -49,8 +49,8 @@
         "entry": "Feishu Bot / Web / HTTP API"
       },
       "snapshot": {
-        "updated": "2026-06-12",
-        "commit": "dfb4be4"
+        "updated": "2026-06-13",
+        "commit": "a99fbd6"
       }
     }
   ],
