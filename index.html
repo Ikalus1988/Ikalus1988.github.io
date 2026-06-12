@@ -1,0 +1,987 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ikalus1988 — Auditable Knowledge Systems Builder.">
+  <meta name="theme-color" content="#0d1117">
+  <title>Ikalus1988 · Auditable Knowledge Systems Builder</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --surface-2: #0f1520;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --green-2: #238636;
+      --blue: #58a6ff;
+      --warning: #d29922;
+      --danger: #f85149;
+      --shadow: rgba(1, 4, 9, 0.78);
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(35, 134, 54, 0.12), transparent 28rem),
+        radial-gradient(circle at 85% 10%, rgba(88, 166, 255, 0.08), transparent 24rem),
+        var(--bg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--green); }
+
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 24px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      backdrop-filter: blur(16px);
+      background: rgba(13, 17, 23, 0.78);
+      border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark {
+      color: var(--green);
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.8125rem;
+    }
+
+    nav a,
+    .terminal-toggle {
+      border: 1px solid transparent;
+      color: var(--muted);
+      background: transparent;
+      font: inherit;
+      cursor: pointer;
+      padding: 5px 8px;
+      border-radius: 999px;
+    }
+
+    nav a:hover,
+    .terminal-toggle:hover,
+    .terminal-toggle:focus-visible {
+      color: var(--green);
+      border-color: var(--border);
+      outline: none;
+    }
+
+    .hero {
+      min-height: calc(88vh - 74px);
+      display: grid;
+      align-content: center;
+      padding: 60px 0 42px;
+    }
+
+    .kicker {
+      color: var(--green);
+      font-size: 0.8125rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin: 0 0 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.75rem, 9vw, 6.4rem);
+      line-height: 0.92;
+      letter-spacing: -0.08em;
+      overflow-wrap: anywhere;
+    }
+
+    .profile-lockup {
+      display: grid;
+      grid-template-columns: minmax(320px, 430px) minmax(0, 1fr);
+      align-items: center;
+      gap: clamp(18px, 4vw, 44px);
+    }
+
+    .profile-avatar {
+      margin: 0;
+      color: var(--green);
+      font-size: clamp(0.5rem, 0.82vw, 0.62rem);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+      white-space: pre;
+      text-shadow: 0 0 18px rgba(63, 185, 80, 0.18);
+      user-select: none;
+      transform: translateX(clamp(14px, 2.2vw, 34px));
+    }
+
+    .identity {
+      margin: 16px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .claim {
+      max-width: 820px;
+      margin: 34px 0 0;
+      font-size: clamp(1rem, 2vw, 1.22rem);
+      line-height: 1.7;
+    }
+
+    .claim-cn {
+      max-width: 820px;
+      margin: 14px 0 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.85;
+    }
+
+    details.pollution {
+      max-width: 820px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: 0.8125rem;
+      border-left: 2px solid var(--border);
+      padding-left: 14px;
+    }
+
+    details.pollution summary {
+      cursor: pointer;
+      color: var(--text);
+      list-style: none;
+    }
+
+    details.pollution summary::-webkit-details-marker { display: none; }
+    details.pollution summary::before { content: "[+] "; color: var(--green); }
+    details.pollution[open] summary::before { content: "[-] "; }
+
+    .links {
+      display: grid;
+      gap: 8px;
+      width: min(540px, 100%);
+      margin: 28px 0 0;
+      font-size: 0.8125rem;
+    }
+
+    .links a {
+      display: block;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      background: rgba(22, 27, 34, 0.45);
+      border-radius: 10px;
+      padding: 10px 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .links a::before {
+      content: "> ";
+      color: var(--green);
+    }
+
+    .links a:hover {
+      color: var(--text);
+      border-color: var(--green-2);
+    }
+
+    section {
+      padding: 54px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .section-label {
+      color: var(--green);
+      font-size: 0.8125rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(1.4rem, 3vw, 2rem);
+      letter-spacing: -0.05em;
+    }
+
+    .muted { color: var(--muted); }
+    .green { color: var(--green); }
+    .blue { color: var(--blue); }
+    .warning { color: var(--warning); }
+
+    .artifact-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, 0.85fr);
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(22, 27, 34, 0.92), rgba(13, 17, 23, 0.88));
+      box-shadow: 0 20px 70px var(--shadow);
+      padding: 22px;
+    }
+
+    .card.primary {
+      border-color: rgba(63, 185, 80, 0.45);
+    }
+
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 1.12rem;
+      letter-spacing: -0.03em;
+    }
+
+    .card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 18px 0 0;
+    }
+
+    .metric {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      background: rgba(13, 17, 23, 0.74);
+      min-width: 0;
+    }
+
+    .metric strong {
+      display: block;
+      color: var(--text);
+      font-size: 1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.72rem;
+      margin-top: 3px;
+      overflow-wrap: anywhere;
+    }
+
+    .snapshot {
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.74rem;
+    }
+
+    .stale-warning {
+      display: none;
+      margin-top: 8px;
+      color: var(--warning);
+      font-size: 0.74rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: var(--text);
+      background: rgba(13, 17, 23, 0.7);
+      font-size: 0.8125rem;
+    }
+
+    .button:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .journey-preview {
+      position: relative;
+      min-height: 240px;
+      margin-top: 18px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(63, 185, 80, 0.12), transparent 40%),
+        repeating-linear-gradient(0deg, rgba(139, 148, 158, 0.06), rgba(139, 148, 158, 0.06) 1px, transparent 1px, transparent 18px),
+        var(--surface-2);
+    }
+
+    .journey-preview iframe {
+      width: 100%;
+      height: 260px;
+      border: 0;
+      background: var(--surface-2);
+    }
+
+    .iframe-fallback {
+      display: none;
+      position: absolute;
+      inset: 0;
+      padding: 20px;
+      align-content: center;
+      text-align: left;
+      background: var(--surface-2);
+    }
+
+    .journey-preview.is-fallback iframe { display: none; }
+    .journey-preview.is-fallback .iframe-fallback { display: grid; }
+
+    .disclosure {
+      margin-top: 14px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .case-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(22, 27, 34, 0.72);
+      padding: 18px;
+      min-height: 220px;
+    }
+
+    .case-card h3 {
+      margin: 0;
+      font-size: 0.98rem;
+    }
+
+    .case-card p {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 3px 8px;
+      font-size: 0.72rem;
+    }
+
+    footer {
+      padding: 44px 0 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8125rem;
+    }
+
+    .terminal-panel {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 50;
+      transform: translate(-50%, calc(100% + 36px));
+      width: min(920px, calc(100% - 28px));
+      max-height: min(74vh, 720px);
+      display: grid;
+      grid-template-rows: auto minmax(180px, 1fr) auto auto;
+      border: 1px solid rgba(63, 185, 80, 0.42);
+      border-radius: 18px;
+      background: rgba(1, 4, 9, 0.96);
+      box-shadow: 0 28px 100px var(--shadow);
+      overflow: hidden;
+      transition: transform 180ms ease;
+    }
+
+    .terminal-panel.is-open {
+      transform: translate(-50%, 0);
+    }
+
+    .terminal-titlebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .terminal-close {
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--muted);
+      border-radius: 999px;
+      font: inherit;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    .terminal-close:hover { color: var(--danger); border-color: var(--danger); }
+
+    .terminal-output {
+      overflow: auto;
+      padding: 12px 14px;
+      white-space: pre;
+      color: var(--text);
+      font-size: clamp(0.5rem, 0.72vw, 0.66rem);
+      line-height: 1.06;
+    }
+
+    .terminal-output .line { margin: 0 0 4px; }
+
+    .terminal-command-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border-top: 1px solid var(--border);
+      background: rgba(13, 17, 23, 0.96);
+    }
+
+    .prompt { color: var(--green); flex: 0 0 auto; }
+
+    .terminal-input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      color: var(--text);
+      background: transparent;
+      font: inherit;
+    }
+
+    .command-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      padding: 10px 12px 12px;
+      border-top: 1px solid rgba(48, 54, 61, 0.65);
+      background: rgba(13, 17, 23, 0.96);
+    }
+
+    .chip {
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      background: transparent;
+      font: inherit;
+      font-size: 0.75rem;
+      cursor: pointer;
+      padding: 5px 8px;
+    }
+
+    .chip:hover { color: var(--green); border-color: var(--green); }
+
+    @media (max-width: 860px) {
+      .artifact-grid,
+      .case-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .page { width: min(100% - 28px, 1120px); padding-top: 10px; }
+      .topbar { align-items: flex-start; }
+      nav { gap: 4px; }
+      nav a { display: none; }
+      .hero { min-height: auto; padding: 40px 0 32px; }
+      .profile-lockup { grid-template-columns: 1fr; gap: 18px; }
+      .profile-avatar { font-size: clamp(0.34rem, 1.65vw, 0.52rem); max-width: 100%; overflow: hidden; transform: translateX(8px); }
+      h1 { font-size: clamp(2.4rem, 16vw, 4.5rem); }
+      .claim { margin-top: 24px; }
+      details.pollution:not([open]) p { display: none; }
+      .links a .url { display: none; }
+      .links a .mobile-label { display: inline; }
+      section { padding: 40px 0; }
+      .metrics { grid-template-columns: 1fr; }
+      .terminal-panel { bottom: 10px; width: calc(100% - 16px); max-height: 82vh; }
+      .terminal-output { font-size: clamp(0.34rem, 1.42vw, 0.52rem); padding: 10px; }
+    }
+
+    @media (min-width: 769px) {
+      .links a .mobile-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="#profile" aria-label="Ikalus1988 home"><span class="brand-mark">&gt;_</span><span>Ikalus1988</span></a>
+      <nav aria-label="Primary navigation">
+        <a href="#profile">Profile</a>
+        <a href="#artifacts">Artifacts</a>
+        <a href="#cases">Case Studies</a>
+        <button class="terminal-toggle" type="button" data-open-terminal>Terminal</button>
+      </nav>
+    </header>
+
+    <main>
+      <section id="profile" class="hero" aria-labelledby="profile-title">
+        <div class="profile-lockup">
+          <pre class="profile-avatar" aria-label="ASCII avatar: black pointed hat, monocle, thin face, robe, mysterious smile"> .                =%%*******##%@@+.               
+           :%*++#*+%%%##%%*+::  .*@%%=            
+        +#%*%#*#%%%##+#**#%%%%#+%%- #*%+          
+      =%*%%*#%%********%**%%%%%%#+###:#**.        
+. .: #@%%***#*#%##%%%%#%%%*%@%%%###+**#* =        
+.-=-%%%%%%%*#%%%%%%%@@%#@@%%**%%####+***#*        
+:=+@#%@@@@%*%%@@@%@@@%%%#%%%%*+*#+*#*****#*=      
+ -%*%%@%%%%*%@%%%@@%%%%#-#%%#@+#=#%%#-#******     
+ %#*%#%%%%%%#%####%@##*#**##%%%#%+-*#--#-==+:*    
+=##*%#*#***##*%%###%@%%%*=#####*##=-+**-*+--+=    
+*%#%%%#%%%%%#=#%%##%%%%#*#*+####***-=++-=:.*#=*#- 
+%****##*##%###=*######%#**#****+-*+---=++*..*=***#
++**#=*=*=*=*##-*=**%##*#.#%#*=*+ +--- .++#.:.#.++*
+*#+##.+-:*+.=-+=:%#=++=--##%#:=- -*- --:+* --=+===
+#:-*-*#*:...=.**+####+*:*-% =:*--==  .--.: :-=*===
+#--%**#%==#**+###%%%*##%%*####%+ +*+. :-:.:-==-=+-
+*%-.=+#**+%+#*#%%%%%%%%%%%##%%%#*=++:-:--:*=:*=-:-
++:: +-*##%*%%%%%%%%@%%%%%%%%%%*++*- .=*:#:-.:.*.*+
+-----.-*+-##+=##%%%%%%%%%%%%%#:= :.=----=:-+*  *. 
+=-+---.-:*=#-:=%%%%%%%%%%%%%%-     .---+-   -.  - 
+:=*+==-  :**+#*#%%%%%%%%%%%.   + .:::=-#     =    
+: =----..:- : .-*%%%%%%#+ ..-:.-=.-:-.+           
+    #+--- :+:-:-+++**+++## :  +    := .           
+               :*#++++*#*#         .              
+               :**#%+*##**:                       
+             .-#**##:=##**##..                    
+          .::.#%%%%%. *#%###-....-:               
+ .:........:.:-#%#*....+%%%#:..:.::.....:..       
+   .  ........-#**##  .#*+## ...........::...     
+          .....+#%%.:..=%%%-.:........  ..:....   
+.             ..%%#:....### .... ..               
+        .       :@#.  ..%@:     .                 
+                 ##      :                        
+                  .                               </pre>
+          <div>
+            <p class="kicker">Auditable Knowledge Systems Builder</p>
+            <h1 id="profile-title">Ikalus1988</h1>
+            <p class="identity">small systems · hard evidence · long-running knowledge</p>
+          </div>
+        </div>
+        <p class="claim">I build small, auditable, long-running knowledge systems for swarm intelligence, industrial RAG, decentralized knowledge, and automation-resistant engineering.</p>
+        <p class="claim-cn">我构建小型、可审计、可长期运行的知识系统，关注群体智能、工业 RAG、去中心化知识库与抗自动化污染的工程实践。</p>
+        <details class="pollution" open>
+          <summary>automation pollution / 抗自动化污染</summary>
+          <p>Automation pollution refers to the progressive degradation of knowledge quality when automated systems (bots, scrapers, LLM-generated content) write back into a knowledge base without human audit.</p>
+          <p>当机器人、爬虫、LLM 生成内容等自动化系统未经人工审计就回写知识库时，知识质量会逐步退化；相关工程实践的目标就是阻止这种退化进入长期知识资产。</p>
+        </details>
+        <div class="links" aria-label="Core links">
+          <a href="https://github.com/Ikalus1988" target="_blank" rel="noreferrer"><span class="url">github.com/Ikalus1988</span><span class="mobile-label">GitHub</span></a>
+          <a href="https://misakanet.org" target="_blank" rel="noreferrer"><span class="url">misakanet.org</span><span class="mobile-label">MisakaNet</span></a>
+          <a href="mailto:bot@misakanet.org"><span class="url">bot@misakanet.org</span><span class="mobile-label">Email planned</span></a>
+        </div>
+      </section>
+
+      <section id="artifacts" aria-labelledby="artifacts-title">
+        <div class="section-head">
+          <div>
+            <p class="section-label">02 / Artifacts</p>
+            <h2 id="artifacts-title">Projects are the resume.</h2>
+          </div>
+          <span class="muted">Snapshot-only, commit-fingerprinted.</span>
+        </div>
+
+        <div class="artifact-grid">
+          <article class="card primary" data-snapshot-date="2026-06-12">
+            <h3><span class="green">MisakaNet</span> · Decentralized Swarm Knowledge Base</h3>
+            <p>Primary artifact and narrative center: a Git-backed swarm knowledge system for verified lessons, autonomous nodes, audit loops, and public construction.</p>
+            <div class="metrics" aria-label="MisakaNet metrics">
+              <div class="metric"><strong>Active Sandbox</strong><span>Status</span></div>
+              <div class="metric"><strong>47+</strong><span>Autonomous Nodes</span></div>
+              <div class="metric"><strong>188+</strong><span>Verified Lessons</span></div>
+              <div class="metric"><strong>Git-backed</strong><span>Knowledge State</span></div>
+            </div>
+            <p class="snapshot">Snapshot updated: 2026-06-12 (commit: dfb4be4)</p>
+            <p class="stale-warning" data-stale-warning></p>
+            <div class="actions">
+              <a class="button" href="https://misakanet.org" target="_blank" rel="noreferrer">Open MisakaNet</a>
+              <a class="button" href="https://misakanet.org/journey/" target="_blank" rel="noreferrer">Open Journey</a>
+            </div>
+            <div class="journey-preview" data-iframe-preview>
+              <iframe src="https://misakanet.org/journey/" title="MisakaNet journey preview" loading="lazy"></iframe>
+              <div class="iframe-fallback">
+                <p class="green">Journey preview fallback</p>
+                <p class="muted">The embedded preview did not load quickly or may be blocked by frame policy. The project remains available through the direct journey link.</p>
+                <a class="button" href="https://misakanet.org/journey/" target="_blank" rel="noreferrer">Open fallback link</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="card" data-snapshot-date="2026-06-12">
+            <h3><span class="blue">Industrial RAG Knowledge Base</span></h3>
+            <p>Feishu-native RAG system for FANUC robot manuals, built around hybrid retrieval, entity indexes, RRF fusion, brand-pollution filtering, and a four-layer quality loop.</p>
+            <div class="metrics" aria-label="Industrial RAG metrics">
+              <div class="metric"><strong>190+ PDFs</strong><span>Documents</span></div>
+              <div class="metric"><strong>230k+</strong><span>Chunks</span></div>
+              <div class="metric"><strong>120-360x</strong><span>Lookup Speedup</span></div>
+              <div class="metric"><strong>4 layers</strong><span>Quality Loop</span></div>
+            </div>
+            <div class="disclosure">
+              <div>Code Status: <span class="warning">Semi-Private / Architectural Archive</span></div>
+              <div>Data Status: <span class="warning">Proprietary data scrubbed</span></div>
+              <div>Entry: Feishu Bot / Web / HTTP API</div>
+            </div>
+            <p class="snapshot">Snapshot updated: 2026-06-12 (commit: dfb4be4)</p>
+            <p class="stale-warning" data-stale-warning></p>
+            <div class="actions">
+              <a class="button" href="https://github.com/Ikalus1988/self-grow-wiki" target="_blank" rel="noreferrer">Open Archive</a>
+              <button class="button" type="button" data-terminal-command="rag">Terminal: rag</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section id="cases" aria-labelledby="cases-title">
+        <div class="section-head">
+          <div>
+            <p class="section-label">03 / Case Studies</p>
+            <h2 id="cases-title">Engineering notes, not lifestyle posts.</h2>
+          </div>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <span class="tag">Available</span>
+            <h3>MisakaNet: Git as a Distributed Knowledge State Machine</h3>
+            <p>How Git commits, lessons, nodes, and audit loops turn public construction into a durable decentralized knowledge state.</p>
+          </article>
+          <article class="case-card">
+            <span class="tag">Draft / Coming in Q3</span>
+            <h3>Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base</h3>
+            <p>How 190+ FANUC PDFs became a Feishu-native RAG loop with hybrid retrieval, entity search, and bad-case learning.</p>
+          </article>
+          <article class="case-card">
+            <span class="tag">Draft / Coming in Q3</span>
+            <h3>Audit Loops Against Low-Quality Automation</h3>
+            <p>The shared pattern behind MisakaNet and Industrial RAG: resist pollution, preserve evidence, and keep knowledge auditable.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Machine surfaces: <a href="manifest.json">manifest.json</a> · <a href="llms.txt">llms.txt</a></p>
+      <p>Zero-Dep static page. No framework, no build step, no backend.</p>
+    </footer>
+  </div>
+
+  <aside class="terminal-panel" id="terminal" aria-hidden="true" aria-label="Pseudo terminal">
+    <div class="terminal-titlebar">
+      <span>guest@ikalus1988.io:~</span>
+      <button class="terminal-close" type="button" data-close-terminal>exit</button>
+    </div>
+    <div class="terminal-output" id="terminal-output" role="log" aria-live="polite"></div>
+    <form class="terminal-command-row" id="terminal-form">
+      <span class="prompt">$</span>
+      <input class="terminal-input" id="terminal-input" autocomplete="off" spellcheck="false" aria-label="Terminal command" placeholder="type help">
+    </form>
+    <div class="command-chips" aria-label="Mobile terminal shortcuts">
+      <button class="chip" type="button" data-terminal-command="help">help</button>
+      <button class="chip" type="button" data-terminal-command="about">about</button>
+      <button class="chip" type="button" data-terminal-command="misaka">misaka</button>
+      <button class="chip" type="button" data-terminal-command="rag">rag</button>
+      <button class="chip" type="button" data-terminal-command="neofetch">neofetch</button>
+      <button class="chip" type="button" data-terminal-command="pulse">pulse</button>
+      <button class="chip" type="button" data-terminal-command="exit">exit</button>
+    </div>
+  </aside>
+
+  <script>
+    const terminal = document.getElementById('terminal');
+    const output = document.getElementById('terminal-output');
+    const input = document.getElementById('terminal-input');
+    const form = document.getElementById('terminal-form');
+    let pulseTimers = [];
+
+    const data = {
+      contact: [
+        'GitHub:    https://github.com/Ikalus1988',
+        'MisakaNet: https://misakanet.org',
+        'Email:     bot@misakanet.org (planned; verify MX before public launch)'
+      ],
+      misaka: [
+        'Project: MisakaNet',
+        'Type: Decentralized Swarm Knowledge Base',
+        'Status: Active Sandbox',
+        'Nodes: 47+ Autonomous Nodes',
+        'Lessons: 188+ Verified Lessons',
+        'Snapshot: 2026-06-12 (commit: dfb4be4)',
+        'Link: https://misakanet.org',
+        'Journey: https://misakanet.org/journey/'
+      ],
+      rag: [
+        'Project: Industrial RAG Knowledge Base',
+        'Type: Feishu-native RAG system for FANUC robot manuals',
+        'Documents: 190+ PDFs',
+        'Chunks: 230k+',
+        'Lookup Speedup: 120-360x',
+        'Quality Loop: 4 layers',
+        'Code Status: Semi-Private / Architectural Archive',
+        'Data Status: Proprietary data scrubbed',
+        'Archive: https://github.com/Ikalus1988/self-grow-wiki'
+      ]
+    };
+
+    const neofetch = String.raw` .                =%%*******##%@@+.               
+           :%*++#*+%%%##%%*+::  .*@%%=            
+        +#%*%#*#%%%##+#**#%%%%#+%%- #*%+          
+      =%*%%*#%%********%**%%%%%%#+###:#**.        
+. .: #@%%***#*#%##%%%%#%%%*%@%%%###+**#* =        
+.-=-%%%%%%%*#%%%%%%%@@%#@@%%**%%####+***#*        
+:=+@#%@@@@%*%%@@@%@@@%%%#%%%%*+*#+*#*****#*=      
+ -%*%%@%%%%*%@%%%@@%%%%#-#%%#@+#=#%%#-#******     
+ %#*%#%%%%%%#%####%@##*#**##%%%#%+-*#--#-==+:*    
+=##*%#*#***##*%%###%@%%%*=#####*##=-+**-*+--+=    
+*%#%%%#%%%%%#=#%%##%%%%#*#*+####***-=++-=:.*#=*#- 
+%****##*##%###=*######%#**#****+-*+---=++*..*=***#
++**#=*=*=*=*##-*=**%##*#.#%#*=*+ +--- .++#.:.#.++*
+*#+##.+-:*+.=-+=:%#=++=--##%#:=- -*- --:+* --=+===
+#:-*-*#*:...=.**+####+*:*-% =:*--==  .--.: :-=*===
+#--%**#%==#**+###%%%*##%%*####%+ +*+. :-:.:-==-=+-
+*%-.=+#**+%+#*#%%%%%%%%%%%##%%%#*=++:-:--:*=:*=-:-
++:: +-*##%*%%%%%%%%@%%%%%%%%%%*++*- .=*:#:-.:.*.*+
+-----.-*+-##+=##%%%%%%%%%%%%%#:= :.=----=:-+*  *. 
+=-+---.-:*=#-:=%%%%%%%%%%%%%%-     .---+-   -.  - 
+:=*+==-  :**+#*#%%%%%%%%%%%.   + .:::=-#     =    
+: =----..:- : .-*%%%%%%#+ ..-:.-=.-:-.+           
+    #+--- :+:-:-+++**+++## :  +    := .           
+               :*#++++*#*#         .              
+               :**#%+*##**:                       
+             .-#**##:=##**##..                    
+          .::.#%%%%%. *#%###-....-:               
+ .:........:.:-#%#*....+%%%#:..:.::.....:..       
+   .  ........-#**##  .#*+## ...........::...     
+          .....+#%%.:..=%%%-.:........  ..:....   
+.             ..%%#:....### .... ..               
+        .       :@#.  ..%@:     .                 
+                 ##      :                        
+                  .                               
+
+        guest@ikalus1988.io
+        -------------------
+        OS: GitHub Pages / Serverless Cloud
+        Shell: Vanilla JS Pseudo-Terminal
+        Engine: Zero-Dep Core Engine v1.0
+        Uptime: Active / Anti-Rot Checked
+        Core Identity: Auditable Knowledge Systems Builder
+        Primary Stack: Python / Web Stdlib / Git
+        Primary Artifact: MisakaNet
+        Secondary Artifact: Industrial RAG Knowledge Base
+
+        Welcome to Ikalus1988's workspace.
+        Type 'help' for available commands.`;
+
+    const commands = {
+      help() {
+        return [
+          'Available commands:',
+          '  help      list commands',
+          '  about     identity summary',
+          '  misaka    MisakaNet summary',
+          '  rag       Industrial RAG summary',
+          '  logs      case study list',
+          '  contact   public contact routes',
+          '  neofetch  environment fingerprint',
+          '  pulse     simulated system pulse',
+          '  clear     clear output',
+          '  exit      close terminal'
+        ].join('\n');
+      },
+      about() {
+        return [
+          'Ikalus1988 — Auditable Knowledge Systems Builder',
+          'I build small, auditable, long-running knowledge systems for swarm intelligence, industrial RAG, decentralized knowledge, and automation-resistant engineering.',
+          '',
+          'Automation pollution: quality degradation when automated systems write back into knowledge bases without human audit.'
+        ].join('\n');
+      },
+      misaka() { return data.misaka.join('\n'); },
+      rag() { return data.rag.join('\n'); },
+      logs() {
+        return [
+          'Case Studies:',
+          '  [Available] MisakaNet: Git as a Distributed Knowledge State Machine',
+          '  [Draft / Coming in Q3] Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base',
+          '  [Draft / Coming in Q3] Audit Loops Against Low-Quality Automation'
+        ].join('\n');
+      },
+      contact() { return data.contact.join('\n'); },
+      neofetch() { return neofetch; },
+      pulse() {
+        runPulse();
+        return '[PULSE] Simulated pulse stream initialized. Not live telemetry.';
+      },
+      clear() {
+        clearPulse();
+        output.textContent = '';
+        return '';
+      },
+      exit() {
+        closeTerminal();
+        return '';
+      }
+    };
+
+    function append(text, className) {
+      if (!text) return;
+      const line = document.createElement('div');
+      line.className = className || 'line';
+      line.textContent = text;
+      output.appendChild(line);
+      output.scrollTop = output.scrollHeight;
+    }
+
+    function execute(commandText) {
+      const command = commandText.trim();
+      if (!command) return;
+      append('$ ' + command, 'line green');
+      const [name] = command.split(/\s+/);
+      const handler = commands[name.toLowerCase()];
+      if (!handler) {
+        append(`Command not found: ${name}. Type 'help'.`);
+        return;
+      }
+      const result = handler(command);
+      append(result);
+    }
+
+    function openTerminal(initialCommand) {
+      terminal.classList.add('is-open');
+      terminal.setAttribute('aria-hidden', 'false');
+      if (!output.textContent.trim()) append(commands.neofetch());
+      setTimeout(() => input.focus(), 60);
+      if (initialCommand) execute(initialCommand);
+    }
+
+    function closeTerminal() {
+      clearPulse();
+      terminal.classList.remove('is-open');
+      terminal.setAttribute('aria-hidden', 'true');
+    }
+
+    function clearPulse() {
+      pulseTimers.forEach(clearTimeout);
+      pulseTimers = [];
+    }
+
+    function runPulse() {
+      clearPulse();
+      const lines = [
+        '[PULSE] Checking MisakaNet snapshot... PASS.',
+        '[PULSE] Node heartbeat sample: simulated latency 14ms.',
+        '[PULSE] Auditing low-quality automation boundary... PASS.',
+        '[PULSE] Industrial RAG quality loop status... SNAPSHOT_ONLY.',
+        '[PULSE] Static site integrity: Zero-Dep Core Engine online.'
+      ];
+      lines.forEach((line, index) => {
+        pulseTimers.push(setTimeout(() => append(line), 360 * (index + 1)));
+      });
+    }
+
+    document.querySelectorAll('[data-open-terminal]').forEach((button) => {
+      button.addEventListener('click', () => openTerminal());
+    });
+
+    document.querySelectorAll('[data-close-terminal]').forEach((button) => {
+      button.addEventListener('click', closeTerminal);
+    });
+
+    document.querySelectorAll('[data-terminal-command]').forEach((button) => {
+      button.addEventListener('click', () => {
+        openTerminal();
+        execute(button.dataset.terminalCommand);
+      });
+    });
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      execute(input.value);
+      input.value = '';
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === '`' && !event.metaKey && !event.ctrlKey && !event.altKey) {
+        const active = document.activeElement;
+        if (active && ['INPUT', 'TEXTAREA'].includes(active.tagName)) return;
+        event.preventDefault();
+        terminal.classList.contains('is-open') ? closeTerminal() : openTerminal();
+      }
+      if (event.key === 'Escape' && terminal.classList.contains('is-open')) closeTerminal();
+    });
+
+    document.querySelectorAll('[data-iframe-preview]').forEach((preview) => {
+      const timer = setTimeout(() => preview.classList.add('is-fallback'), 2500);
+      const iframe = preview.querySelector('iframe');
+      iframe.addEventListener('load', () => clearTimeout(timer), { once: true });
+      iframe.addEventListener('error', () => preview.classList.add('is-fallback'), { once: true });
+    });
+
+    function updateSnapshotWarnings() {
+      const now = new Date();
+      document.querySelectorAll('[data-snapshot-date]').forEach((card) => {
+        const date = new Date(card.dataset.snapshotDate + 'T00:00:00Z');
+        const days = Math.floor((now - date) / 86400000);
+        const warning = card.querySelector('[data-stale-warning]');
+        if (warning && days > 90) {
+          warning.style.display = 'block';
+          warning.textContent = `⚠ Snapshot un-synced for ${days} days; check project links for current status.`;
+        }
+      });
+    }
+
+    updateSnapshotWarnings();
+  </script>
+</body>
+</html>

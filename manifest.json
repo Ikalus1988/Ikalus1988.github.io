@@ -1,0 +1,80 @@
+{
+  "schema_version": "misaka-manifest-v2",
+  "developer": "Ikalus1988",
+  "core_identity": "Auditable Knowledge Systems Builder",
+  "last_updated": "2026-06-12",
+  "commit": "dfb4be4",
+  "focus": [
+    "Swarm Intelligence",
+    "Industrial RAG",
+    "Decentralized Knowledge Base",
+    "Automation-Resistant Engineering",
+    "Long-Running Knowledge Systems"
+  ],
+  "profile": {
+    "claim_en": "I build small, auditable, long-running knowledge systems for swarm intelligence, industrial RAG, decentralized knowledge, and automation-resistant engineering.",
+    "claim_zh": "我构建小型、可审计、可长期运行的知识系统，关注群体智能、工业 RAG、去中心化知识库与抗自动化污染的工程实践。",
+    "automation_pollution_definition": "Automation pollution refers to the progressive degradation of knowledge quality when automated systems, including bots, scrapers, and LLM-generated content, write back into a knowledge base without human audit."
+  },
+  "primary_project": {
+    "name": "MisakaNet",
+    "role": "Founder / Core Architect",
+    "type": "Decentralized Swarm Knowledge Base",
+    "endpoint": "https://misakanet.org",
+    "journey": "https://misakanet.org/journey/",
+    "machine_spec": "https://misakanet.org/journey/scenario_191.json",
+    "metrics": {
+      "nodes": "47+ Autonomous Nodes",
+      "lessons": "188+ Verified Lessons",
+      "status": "Active Sandbox"
+    },
+    "snapshot": {
+      "updated": "2026-06-12",
+      "commit": "dfb4be4"
+    }
+  },
+  "secondary_projects": [
+    {
+      "name": "Industrial RAG Knowledge Base",
+      "role": "Architect / Builder",
+      "type": "Feishu-native RAG system for industrial robot manuals",
+      "repository": "https://github.com/Ikalus1988/self-grow-wiki",
+      "code_status": "Semi-Private / Architectural Archive",
+      "data_status": "Proprietary data scrubbed",
+      "metrics": {
+        "documents": "190+ PDFs",
+        "chunks": "230k+",
+        "lookup_speedup": "120-360x",
+        "quality_loop": "4 layers",
+        "entry": "Feishu Bot / Web / HTTP API"
+      },
+      "snapshot": {
+        "updated": "2026-06-12",
+        "commit": "dfb4be4"
+      }
+    }
+  ],
+  "case_studies": [
+    {
+      "title": "MisakaNet: Git as a Distributed Knowledge State Machine",
+      "status": "available",
+      "summary": "Git-backed lessons, autonomous nodes, and audit loops as a durable decentralized knowledge state."
+    },
+    {
+      "title": "Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base",
+      "status": "draft / coming in Q3",
+      "summary": "Industrial robot manuals transformed into a Feishu-native RAG loop with retrieval quality feedback."
+    },
+    {
+      "title": "Audit Loops Against Low-Quality Automation",
+      "status": "draft / coming in Q3",
+      "summary": "Shared audit patterns for resisting automated knowledge pollution."
+    }
+  ],
+  "contact_preference": {
+    "github": "https://github.com/Ikalus1988",
+    "misakanet": "https://misakanet.org",
+    "email": "bot@misakanet.org",
+    "email_status": "planned; verify MX and inbound delivery before public launch"
+  }
+}

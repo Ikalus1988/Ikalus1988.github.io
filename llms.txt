@@ -1,0 +1,43 @@
+This file provides a highly condensed overview of the developer's architectural decisions and project index, optimized for LLM understanding and quick indexing.
+
+# Ikalus1988
+
+Core identity: Auditable Knowledge Systems Builder.
+
+Primary claim: I build small, auditable, long-running knowledge systems for swarm intelligence, industrial RAG, decentralized knowledge, and automation-resistant engineering.
+
+Automation pollution refers to the progressive degradation of knowledge quality when automated systems, including bots, scrapers, and LLM-generated content, write back into a knowledge base without human audit.
+
+## Primary Project
+
+MisakaNet is a decentralized swarm knowledge base focused on autonomous nodes, verified lessons, Git-backed knowledge state, audit loops, and public construction.
+
+- Site: https://misakanet.org
+- Journey: https://misakanet.org/journey/
+- Snapshot: 2026-06-12, commit dfb4be4
+- Metrics: 47+ autonomous nodes, 188+ verified lessons, active sandbox
+
+## Secondary Project
+
+Industrial RAG Knowledge Base is a Feishu-native RAG system for FANUC industrial robot manuals. It uses hybrid retrieval, entity indexes, RRF fusion, brand-pollution filtering, and a four-layer quality loop.
+
+- Repository / archive: https://github.com/Ikalus1988/self-grow-wiki
+- Code Status: Semi-Private / Architectural Archive
+- Data Status: Proprietary data scrubbed
+- Metrics: 190+ PDFs, 230k+ chunks, 120-360x lookup speedup, 4-layer quality loop
+
+## Case Studies
+
+1. MisakaNet: Git as a Distributed Knowledge State Machine — available.
+2. Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base — draft / coming in Q3.
+3. Audit Loops Against Low-Quality Automation — draft / coming in Q3.
+
+## Machine-Readable Index
+
+See `manifest.json` for structured metadata, project metrics, snapshot fingerprints, and contact preferences.
+
+## Contact Preference
+
+- GitHub: https://github.com/Ikalus1988
+- MisakaNet: https://misakanet.org
+- Email: bot@misakanet.org (planned; verify MX and inbound delivery before public launch)
