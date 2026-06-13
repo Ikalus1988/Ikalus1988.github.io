@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The 43-Line Python Hook That Beat pre-commit's Core Team — A case study in supply chain autonomy and engineering conviction.">
+  <meta name="theme-color" content="#0d1117">
+  <title>The 43-Line Hook That Beat pre-commit's Core Team · Ikalus1988</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --green: #3fb950; --green-2: #238636; --blue: #58a6ff; --warning: #d29922; --danger: #f85149; --shadow: rgba(1,4,9,0.78); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body { margin: 0; color: var(--text); background: var(--bg); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; line-height: 1.7; }
+    a { color: var(--blue); }
+    a:hover { color: var(--green); }
+    .page { width: min(760px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 96px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; line-height: 1.3; }
+    h2 { font-size: 1.15rem; margin: 32px 0 12px; color: var(--green); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1rem; margin: 24px 0 8px; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    .meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 32px; }
+    .back { color: var(--muted); font-size: 0.82rem; margin-bottom: 32px; display: inline-block; }
+    .back:hover { color: var(--green); }
+    code { background: rgba(48,54,61,0.4); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; margin: 16px 0; }
+    pre code { background: none; padding: 0; border-radius: 0; }
+    blockquote { border-left: 3px solid var(--green); margin: 16px 0; padding: 8px 16px; background: rgba(35,134,54,0.04); border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+    blockquote p { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+    th { background: var(--surface); color: var(--text); }
+    .badge { display: inline-block; border: 1px solid var(--green); color: var(--green); background: rgba(35,134,54,0.1); border-radius: 999px; padding: 3px 10px; font-size: 0.72rem; margin-bottom: 16px; }
+    .verdict { background: linear-gradient(135deg, rgba(35,134,54,0.08), transparent); border: 1px solid var(--green); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .timeline { list-style: none; padding: 0; }
+    .timeline li { padding: 4px 0 4px 20px; border-left: 2px solid var(--border); margin-left: 6px; position: relative; font-size: 0.88rem; }
+    .timeline li::before { content: '◆'; position: absolute; left: -10px; color: var(--green); font-size: 0.7rem; top: 6px; }
+    .timeline li.fail::before { color: var(--danger); }
+    .timeline li.done::before { color: var(--green); }
+    .timeline li span { color: var(--muted); font-size: 0.78rem; }
+    @media (max-width: 600px) { .page { padding: 24px 0 64px; } h1 { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <a href="/" class="back">← back to hub</a>
+  <span class="badge">✦ Case Study · Engineering</span>
+  <h1>The 43-Line Python Hook That Beat pre-commit's Core Team</h1>
+  <p class="meta">2026-06-13 · 6 min read · <a href="https://github.com/Ikalus1988/MisakaNet">MisakaNet</a> · <a href="https://github.com/pre-commit/pre-commit-hooks/pull/1262">PR #1262</a></p>
+
+  <blockquote>
+    <p>We wrote 43 lines of Python. We passed 16 tests, flake8, mypy, and GitHub Actions on 3 OSes. The core team closed our PR with "use pygrep instead." So we forked the protocol and made it our own.</p>
+  </blockquote>
+
+  <h2>The Target</h2>
+  <p>Every commit in the MisakaNet swarm must carry a valid <code>Signed-off-by: Name &lt;email&gt;</code> line — the Developer Certificate of Origin (DCO). Without it, contributions can't be audited, and the network's legal foundation collapses.</p>
+  <p>The obvious move: submit a native <code>check-dco</code> hook to <code>pre-commit/pre-commit-hooks</code>, the standard library used by millions. Write clean code, pass all checks, get merged. Standard open-source playbook.</p>
+
+  <h2>The Work</h2>
+  <p>43 lines of Python. No dependencies. Pure stdlib. A single regex with named capture groups:</p>
+  <pre><code>SIGNOFF_RE = re.compile(
+    r'^Signed-off-by: (?P&lt;name&gt;.+?) &lt;(?P&lt;email&gt;.+?)&gt;$',
+    re.MULTILINE,
+)</code></pre>
+  <p>Plus 16 pytest cases covering every edge case — standard sign-offs, co-authored-by, body-middle placement, full names, plus addresses, empty messages, malformed formats, case sensitivity, missing colons.</p>
+  <p>CI was configured. <code>pre-commit.ci</code> was green. GitHub Actions ran tox across py310–py313 on Linux and Windows. All green. Every check passed.</p>
+
+  <h2>The Rejection</h2>
+  <p>The PR was assigned to <strong>asottile</strong>, the core maintainer of <code>pre-commit</code>. His response was brief and definitive:</p>
+  <blockquote><p>"You can achieve this with the built-in <code>pygrep</code> hook. A regex in the YAML config is enough."</p></blockquote>
+  <p>The PR was closed. Not merged. Not deferred. <strong>Closed.</strong></p>
+  <p>On one level, he was right — pygrep <em>can</em> match a Signed-off-by line with a single regex. But on every other level, the recommendation missed the point entirely.</p>
+
+  <h2>Why We Said No to pygrep</h2>
+
+  <table>
+    <tr><th>Dimension</th><th>Our 43-Line Hook</th><th>pygrep (Official Suggestion)</th></tr>
+    <tr>
+      <td><strong>Error experience</strong></td>
+      <td>Precise stderr: "missing Signed-off-by. Use <code>git commit -s</code>"</td>
+      <td>Crude line-match failure. No guidance, no path forward.</td>
+    </tr>
+    <tr>
+      <td><strong>Multi-signoff</strong></td>
+      <td>Native Python handles co-authored-by, multiple sign-offs, body-order</td>
+      <td>Regex cross-line matching is fragile, prone to false positives</td>
+    </tr>
+    <tr>
+      <td><strong>Test coverage</strong></td>
+      <td>16 pytest cases, run in CI on every change</td>
+      <td>Zero. Regex lives in YAML. No test runner.</td>
+    </tr>
+    <tr>
+      <td><strong>Supply chain</strong></td>
+      <td>Pinned commit in our own repo. Full control.</td>
+      <td>Dependent on upstream regex stability. One wrong change = blocked commits.</td>
+    </tr>
+  </table>
+
+  <p>This wasn't about being stubborn. It's about what happens when your AI agents depend on a hook that <em>has</em> to work. If pygrep's regex silently breaks after an upstream update, every agent in the swarm gets blocked simultaneously. With a Python hook under our control, we test it, we pin it, we own it.</p>
+
+  <h2>Plan B: Lightning Deployment</h2>
+
+  <p>The same day the PR was closed, we executed Plan B:</p>
+
+  <ul class="timeline">
+    <li class="done">Extract 5 files into <code>Ikalus1988/pre-commit-dco</code><span> — 3 hours</span></li>
+    <li class="done">16 pytest cases all green<span> — verified by zsxh</span></li>
+    <li class="done">Publish to GitHub, pin commit <code>179f50b</code><span> — 10 minutes</span></li>
+    <li class="done">Update <code>.pre-commit-config.yaml</code> in MisakaNet<span> — 2 minutes</span></li>
+    <li class="done">Full CI re-run: all green<span> — 8 minutes</span></li>
+    <li class="done">ADR filed, Issue closed, decision archived<span> — 15 minutes</span></li>
+  </ul>
+
+  <div class="verdict">
+    <p><strong>Total time from rejection to full autonomy: ~4 hours.</strong></p>
+    <p>The upstream's decision became irrelevant. Our agents didn't notice. Our CI didn't break. The network kept running.</p>
+  </div>
+
+  <h2>The Deeper Lesson</h2>
+
+  <p>This isn't a story about being "right" and upstream being "wrong." It's about <strong>supply chain philosophy</strong>.</p>
+
+  <p>The pre-commit ecosystem is built on trust in a single maintainer (asottile). He's brilliant, but his priorities are not our priorities. His repo serves millions of users; ours serves a specific swarm network with specific needs. Relying on his review cycle for our core compliance gate was a mistake — and we knew it before the rejection came.</p>
+
+  <p>The rejection was confirmation, not surprise. We had already sketched Plan B. The upstream's "no" just made us execute faster.</p>
+
+  <h2>The Numbers</h2>
+
+  <pre><code>Files committed:     5
+Lines of Python:    43 (+ 116 test lines)
+Test cases:         16 (7 success + 6 failure + 3 CLI)
+Time to autonomy:   ~4 hours from rejection
+Upstream impact:    Zero. Network never noticed.
+Dependencies:       Zero. Pure stdlib.</code></pre>
+
+  <h2>Principles That Survived</h2>
+
+  <ul>
+    <li><strong>Your compliance gate is not upstream's problem.</strong> Own the tools your network depends on.</li>
+    <li><strong>Test your coverage, not your luck.</strong> 16 test cases caught issues that pygrep regex never would.</li>
+    <li><strong>Plan B before Plan A lands.</strong> We sketched the independent repo before the PR was submitted. When rejection came, it was a button press, not a crisis.</li>
+    <li><strong>Transparency builds trust.</strong> The ADR, the issue, the pinned commit — everything is public. Anyone can audit the decision.</li>
+  </ul>
+
+  <hr style="border-color: var(--border); margin: 40px 0;">
+
+  <p style="font-size: 0.82rem; color: var(--muted);">
+    <strong>References:</strong><br>
+    <a href="https://github.com/pre-commit/pre-commit-hooks/pull/1262">PR #1262</a> — The rejected submission<br>
+    <a href="https://github.com/Ikalus1988/pre-commit-dco">Ikalus1988/pre-commit-dco</a> — The independent hook repo<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet/blob/main/docs/adr/pre-commit-dco-independent.md">ADR: Independent pre-commit-dco Hook</a> — Full decision record<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet">MisakaNet</a> — The swarm knowledge network
+  </p>
+
+  <p style="font-size: 0.82rem; color: var(--muted); margin-top: 48px;">
+    <a href="/">← back to hub</a>
+  </p>
+</div>
+</body>
+</html>

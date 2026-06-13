@@ -414,6 +414,21 @@
       background: rgba(22, 27, 34, 0.72);
       padding: 18px;
       min-height: 220px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .case-card:hover {
+      border-color: var(--green);
+      background: rgba(35, 134, 54, 0.06);
+    }
+
+    .case-card.featured {
+      border-color: var(--green);
+      background: linear-gradient(135deg, rgba(35, 134, 54, 0.08), rgba(22, 27, 34, 0.72));
+      box-shadow: 0 0 24px rgba(35, 134, 54, 0.08);
+    }
+    .case-card.featured:hover {
+      border-color: var(--green-2);
+      box-shadow: 0 0 32px rgba(35, 134, 54, 0.15);
     }
 
     .case-card h3 {
@@ -433,6 +448,12 @@
       color: var(--muted);
       padding: 3px 8px;
       font-size: 0.72rem;
+    }
+
+    .tag-featured {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(35, 134, 54, 0.1);
     }
 
     footer {
@@ -709,6 +730,13 @@
           </div>
         </div>
         <div class="case-grid">
+          <a href="cases/check-dco-pre-commit-battle.html" style="display: contents; color: inherit;">
+          <article class="case-card featured">
+            <span class="tag tag-featured">✦ Featured</span>
+            <h3 style="color: var(--green);">The 43-Line Python Hook That Beat pre-commit's Core Team</h3>
+            <p>How we rejected pygrep, built a standalone check-dco in 43 lines, survived upstream rejection, and achieved full supply chain autonomy.</p>
+          </article>
+          </a>
           <article class="case-card">
             <span class="tag">Available</span>
             <h3>MisakaNet: Git as a Distributed Knowledge State Machine</h3>
