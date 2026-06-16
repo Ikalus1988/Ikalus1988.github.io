@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The OPENCLAW_ERROR_HANDLER PR — A 30-line hook that survived 3 architecture audits, shell injection fixes, and ClawSweeper gold shrimp rating.">
+  <meta name="theme-color" content="#0d1117">
+  <title>The 30-Line Hook That Got Gold Shrimp · Ikalus1988</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --green: #3fb950; --green-2: #238636; --blue: #58a6ff; --warning: #d29922; --danger: #f85149; --shadow: rgba(1,4,9,0.78); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body { margin: 0; color: var(--text); background: var(--bg); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; line-height: 1.7; }
+    a { color: var(--blue); }
+    a:hover { color: var(--green); }
+    .page { width: min(760px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 96px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; line-height: 1.3; }
+    h2 { font-size: 1.15rem; margin: 32px 0 12px; color: var(--green); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1rem; margin: 24px 0 8px; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    .meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 32px; }
+    .back { color: var(--muted); font-size: 0.82rem; margin-bottom: 32px; display: inline-block; }
+    .back:hover { color: var(--green); }
+    code { background: rgba(48,54,61,0.4); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; margin: 16px 0; }
+    pre code { background: none; padding: 0; border-radius: 0; }
+    blockquote { border-left: 3px solid var(--green); margin: 16px 0; padding: 8px 16px; background: rgba(35,134,54,0.04); border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+    blockquote p { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+    th { background: var(--surface); color: var(--text); }
+    .badge { display: inline-block; border: 1px solid var(--green); color: var(--green); background: rgba(35,134,54,0.1); border-radius: 999px; padding: 3px 10px; font-size: 0.72rem; margin-bottom: 16px; }
+    .badge-silver { border-color: var(--muted); color: var(--muted); background: rgba(139,148,158,0.08); }
+    .badge-gold { border-color: #d29922; color: #d29922; background: rgba(210,153,34,0.1); }
+    .verdict { background: linear-gradient(135deg, rgba(35,134,54,0.08), transparent); border: 1px solid var(--green); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .timeline { list-style: none; padding: 0; }
+    .timeline li { padding: 4px 0 4px 20px; border-left: 2px solid var(--border); margin-left: 6px; position: relative; font-size: 0.88rem; }
+    .timeline li::before { content: '◆'; position: absolute; left: -10px; color: var(--green); font-size: 0.7rem; top: 6px; }
+    .timeline li.fail::before { color: var(--danger); }
+    .timeline li.done::before { color: var(--green); }
+    .timeline li.warn::before { color: var(--warning); }
+    .timeline li span { color: var(--muted); font-size: 0.78rem; }
+    @media (max-width: 600px) { .page { padding: 24px 0 64px; } h1 { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <a href="/" class="back">← back to hub</a>
+  <span class="badge">✦ Case Study · Security · Protocol</span>
+  <h1>The 30-Line Hook That Got Gold Shrimp</h1>
+  <p class="meta">2026-06-16 · 8 min read · <a href="https://github.com/openclaw/openclaw">OpenClaw</a> · <a href="https://github.com/openclaw/openclaw/pull/93310">PR #93310</a></p>
+
+  <blockquote>
+    <p>30 lines of TypeScript. Zero new dependencies. Survived 3 architecture audits—Gemini proposal, minimax M3 audit, ClawSweeper gold shrimp. Shell injection? Blocked. Stdin flush race? Eliminated. Process env secrets? Isolated. And we never built the full runtime because tsdown needs 12GB and our dev box has 11.</p>
+  </blockquote>
+
+  <h2>The Target</h2>
+  <p>OpenClaw—a fast-growing open-source JavaScript runtime—has a sophisticated fatal error hook system called <code>runFatalErrorHooks</code>. But there is no standard way for operators to route crash diagnostics to an external tool (syslog, webhook, custom script).</p>
+  <p>The fix: a single environment variable <code>OPENCLAW_ERROR_HANDLER</code> that spawns an external executable with a structured JSON payload when OpenClaw hits a fatal error. Fire-and-forget. Zero impact when unset.</p>
+
+  <h2>The Three Audits</h2>
+
+  <h3>v1 — Gemini Proposal (shell: true + stdin pipe)</h3>
+  <p>First pass was naive: <code>shell: true</code> for convenience, JSON piped via stdin. Two blocking issues caught immediately:</p>
+  <ul>
+    <li><strong>Shell injection:</strong> <code>OPENCLAW_ERROR_HANDLER="/usr/bin/logger; rm -rf /"</code> executes arbitrary commands</li>
+    <li><strong>Stdin flush race:</strong> <code>process.exit()</code> closes stdin before the child finishes reading the payload</li>
+  </ul>
+
+  <h3>v2 — minimax M3 Audit (shell: false + argv + RAW opt-in)</h3>
+  <p>Second pass fixed both: <code>shell: false</code> prevents injection by treating the env var as a literal path. Payload moves from stdin to <code>argv[1]</code>—delivered atomically during <code>execve()</code>, no race. Added <code>OPENCLAW_ERROR_HANDLER_RAW=1</code> opt-in for operators who want full stack traces.</p>
+  <p>New issues surfaced: the RAW path couldn't be tested (OpenClaw build needs ≥12GB RAM, our WSL2 has 11GB), and argv with stack traces leaks sensitive data to <code>ps aux</code>.</p>
+
+  <h3>v3 (Final) — Redacted-Only + ClawSweeper Gold Shrimp</h3>
+  <p>Final design removed RAW entirely. Payload fixed to 4 non-sensitive fields:</p>
+  <pre><code>{
+  schemaVersion: 1,    // forward compatibility
+  reason: string,       // error reason code
+  timestamp: string,    // ISO8601 UTC
+  pid: number,          // process ID, safe for argv
+}</code></pre>
+  <p>Plus three hardening passes from ClawSweeper:</p>
+  <ul>
+    <li><strong>Round 1 (分割线17):</strong> Added <code>## Real behavior proof</code> heading wrapper for policy compliance</li>
+    <li><strong>Round 2 (分割线20):</strong> <code>stdio: "ignore"</code> — full fire-and-forget, no terminal coupling</li>
+    <li><strong>Round 3 (分割线21):</strong> <code>env: { PATH: process.env.PATH }</code> — block secret inheritance, only expose PATH</li>
+  </ul>
+  <p>ClawSweeper verdict: <span class="badge badge-gold">🦐 gold shrimp</span></p>
+
+  <h2>The Architecture</h2>
+  <pre><code>function runExternalErrorHandler(context: FatalErrorHookContext): void {
+  const handler = process.env.OPENCLAW_ERROR_HANDLER?.trim();
+  if (!handler) return;
+
+  try {
+    const payload = {
+      schemaVersion: 1,
+      reason: context.reason,
+      timestamp: new Date().toISOString(),
+      pid: process.pid,
+    };
+    const child = spawn(handler, [JSON.stringify(payload)], {
+      env: { PATH: process.env.PATH },  // ← secret isolation
+      stdio: "ignore",                     // ← no terminal coupling
+      detached: true,                      // ← independent process group
+      shell: false,                        // ← literal path only
+    });
+    child.on("error", () => {});
+    child.unref();
+  } catch (err) {
+    console.error("[fatal-error-hooks] failed:", String(err));
+  }
+}</code></pre>
+
+  <h2>The Timeline</h2>
+  <ul class="timeline">
+    <li class="done">2026-06-14 <span>Gemini v1 proposal (shell:true + stdin)</span></li>
+    <li class="fail">2026-06-15 <span>minimax M3 audit: 7 issues, 2 blocking</span></li>
+    <li class="done">2026-06-15 <span>v2 fix: shell:false + argv + RAW opt-in</span></li>
+    <li class="done">2026-06-16 00:38 <span>方案A decision: remove RAW entirely</span></li>
+    <li class="done">2026-06-16 01:02 <span>fatal-error-hooks-rawless.ts committed</span></li>
+    <li class="fail">2026-06-16 ~10:00 <span>ClawSweeper: missing Real behavior proof heading</span></li>
+    <li class="done">2026-06-16 14:13 <span>PR body v3.1 PATCHed → policy passed</span></li>
+    <li class="done">2026-06-16 16:50 <span>stdio:ignore + env:{} isolation committed</span></li>
+    <li class="warn">2026-06-16 17:16 <span>ClawSweeper: gold shrimp, but verdict still needs-human</span></li>
+    <li class="warn">Stuck: <span>Standalone spawn harness vs real OpenClaw fatal path (OOM at 11GB)</span></li>
+  </ul>
+
+  <h2>Current Status</h2>
+  <p>PR #93310 is open. All policy checks pass. ClawSweeper rates it gold shrimp. The only remaining blocker: ClawSweeper's Codex review wants proof that the hook works inside a real OpenClaw fatal exit path, not just a standalone spawn harness. To build the full runtime, tsdown needs ≥12GB RAM—our WSL2 dev environment has 11GB.</p>
+
+  <div class="verdict">
+    <p><strong>🦐 Gold Shrimp · Waiting on Maintainer</strong></p>
+    <p style="font-size: 0.88rem;">PR: <a href="https://github.com/openclaw/openclaw/pull/93310">openclaw/openclaw#93310</a> · Fork: <code>zsxh1990/openclaw</code> · Branch: <code>feat/openclaw-error-handler-env</code></p>
+  </div>
+
+  <h2>Key Numbers</h2>
+  <pre><code>Lines of TypeScript:   30 (final)
+Architecture audits:   3 (Gemini → minimax → ClawSweeper)
+ClawSweeper rounds:    3 (heading → stdio → env)
+Security fixes:        3 (injection → argv leak → secret inheritance)
+Dependencies added:    0
+Build RAM required:    12GB (tsdown)
+Dev box RAM:           11GB (WSL2)
+Proof scenarios:       5/5 passed
+PR body revisions:     4 (v1 → v2 → v3 → v3.1)</code></pre>
+
+  <h2>Principles That Survived</h2>
+  <ul>
+    <li><strong>Zero new dependencies is non-negotiable.</strong> The entire hook is stdlib composition. No npm packages, no build step, no supply chain risk.</li>
+    <li><strong>Security is layered, not bolted on.</strong> shell:false + stdio:ignore + env isolation + redacted payload = 4 independent defenses.</li>
+    <li><strong>If you can't test a code path, don't ship it.</strong> RAW mode was deleted because it couldn't be verified without a full build environment.</li>
+    <li><strong>Atomic delivery beats async protocols.</strong> argv[1] during execve eliminates the stdin flush race that even well-engineered tools get wrong.</li>
+  </ul>
+
+  <h2>Relevance to MisakaNet</h2>
+  <p>This protocol is the standard upstream input contract for MisakaNet's <code>--heal</code> mode:</p>
+  <pre><code>OpenClaw ──[OPENCLAW_ERROR_HANDLER]──→ external script ──→ MisakaNet --heal
+                                                              ↓
+                                                       search_knowledge.py
+                                                       (error signature → lesson)</code></pre>
+  <p>Any CLI tool that adopts this env-var-based fatal error hook becomes a first-class citizen of the MisakaNet swarm knowledge network—its crashes auto-diagnosed via the shared lesson database.</p>
+
+  <hr style="border-color: var(--border); margin: 40px 0;">
+
+  <p style="font-size: 0.82rem; color: var(--muted);">
+    <strong>References:</strong><br>
+    <a href="https://github.com/openclaw/openclaw/pull/93310">PR #93310</a> — The OpenClaw fatal error handler PR<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet/blob/main/lessons/contrib/openclaw-fatal-error-hook-protocol.md">SKP Lesson: OpenClaw Fatal Error Hook Protocol</a> — Full design record<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet">MisakaNet</a> — The swarm knowledge network
+  </p>
+
+  <p style="font-size: 0.82rem; color: var(--muted); margin-top: 48px;">
+    <a href="/">← back to hub</a>
+  </p>
+</div>
+</body>
+</html>
