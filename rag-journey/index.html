@@ -1,441 +1,441 @@
-     1|<!DOCTYPE html>
-     2|<html lang="zh-CN">
-     3|<head>
-     4|<meta charset="UTF-8">
-     5|<meta name="viewport" content="width=device-width, initial-scale=1.0">
-     6|<title>工业 RAG 知识库 — 自我演进旅程</title>
-     7|<style>
-     8|*{margin:0;padding:0;box-sizing:border-box}
-     9|body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0d1117;color:#c9d1d9;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem}
-    10|h1{font-size:1.5rem;font-weight:600;color:#58a6ff;margin-bottom:.25rem}
-    11|.subtitle{color:#8b949e;font-size:.9rem;margin-bottom:2rem}
-    12|.container{max-width:780px;width:100%}
-    13|
-    14|/* Progress dots */
-    15|.progress-bar{display:flex;justify-content:space-between;margin-bottom:2rem;padding:0 .5rem}
-    16|.step-dot{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;position:relative}
-    17|.step-dot::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:#21262d;z-index:0}
-    18|.step-dot:last-child::after{display:none}
-    19|.step-dot.active::after{background:#58a6ff}
-    20|.step-dot.done::after{background:#3fb950}
-    21|.dot{width:24px;height:24px;border-radius:50%;background:#21262d;border:2px solid #30363d;display:flex;align-items:center;justify-content:center;font-size:.7rem;z-index:1;transition:all .4s}
-    22|.step-dot.active .dot{border-color:#58a6ff;background:#1f3a5f}
-    23|.step-dot.done .dot{border-color:#3fb950;background:#1a4a2a}
-    24|.dot-label{font-size:.65rem;color:#8b949e;text-align:center;white-space:nowrap}
-    25|.step-dot.active .dot-label{color:#58a6ff}
-    26|.step-dot.done .dot-label{color:#3fb950}
-    27|
-    28|/* Card */
-    29|.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1.5rem;margin-bottom:1rem;min-height:200px;position:relative}
-    30|.card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid #21262d}
-    31|.card-header .icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
-    32|.card-header .name{font-weight:600;font-size:.9rem}
-    33|.card-header .tag{font-size:.7rem;padding:.15rem .5rem;border-radius:12px;background:#21262d;color:#8b949e;margin-left:auto}
-    34|.card-body{font-size:.88rem;line-height:1.6;color:#c9d1d9}
-    35|.card-body .highlight{color:#58a6ff}
-    36|.card-body .success{color:#3fb950}
-    37|.card-body .warn{color:#d29922}
-    38|.card-body .error{color:#f85149}
-    39|.card-body code{background:#0d1117;padding:.1rem .3rem;border-radius:4px;font-size:.8rem;color:#ffa657}
-    40|.card-body pre{background:#0d1117;padding:.75rem;border-radius:6px;border:1px solid #21262d;overflow-x:auto;font-size:.78rem;line-height:1.5;margin:.5rem 0}
-    41|.card-body pre .cm{color:#8b949e}
-    42|.card-body pre .cmd{color:#ffa657}
-    43|.card-body pre .out{color:#7ee787}
-    44|
-    45|/* Log area */
-    46|.log{background:#0d1117;border:1px solid #21262d;border-radius:6px;padding:1rem;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:.78rem;line-height:1.6;max-height:200px;overflow-y:auto;margin-bottom:1rem}
-    47|.log.hidden{display:none}
-    48|.log .line{opacity:0;animation:fadeUp .4s forwards}
-    49|.log .info{color:#58a6ff}
-    50|.log .scan{color:#79c0ff}
-    51|.log .ok{color:#3fb950}
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>工业 RAG 知识库 — 自我演进旅程</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#0d1117;color:#c9d1d9;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:2rem 1rem}
+h1{font-size:1.5rem;font-weight:600;color:#58a6ff;margin-bottom:.25rem}
+.subtitle{color:#8b949e;font-size:.9rem;margin-bottom:2rem}
+.container{max-width:780px;width:100%}
+
+/* Progress dots */
+.progress-bar{display:flex;justify-content:space-between;margin-bottom:2rem;padding:0 .5rem}
+.step-dot{display:flex;flex-direction:column;align-items:center;gap:.4rem;flex:1;position:relative}
+.step-dot::after{content:'';position:absolute;top:12px;left:50%;width:100%;height:2px;background:#21262d;z-index:0}
+.step-dot:last-child::after{display:none}
+.step-dot.active::after{background:#58a6ff}
+.step-dot.done::after{background:#3fb950}
+.dot{width:24px;height:24px;border-radius:50%;background:#21262d;border:2px solid #30363d;display:flex;align-items:center;justify-content:center;font-size:.7rem;z-index:1;transition:all .4s}
+.step-dot.active .dot{border-color:#58a6ff;background:#1f3a5f}
+.step-dot.done .dot{border-color:#3fb950;background:#1a4a2a}
+.dot-label{font-size:.65rem;color:#8b949e;text-align:center;white-space:nowrap}
+.step-dot.active .dot-label{color:#58a6ff}
+.step-dot.done .dot-label{color:#3fb950}
+
+/* Card */
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:1.5rem;margin-bottom:1rem;min-height:200px;position:relative}
+.card-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem;padding-bottom:.75rem;border-bottom:1px solid #21262d}
+.card-header .icon{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.card-header .name{font-weight:600;font-size:.9rem}
+.card-header .tag{font-size:.7rem;padding:.15rem .5rem;border-radius:12px;background:#21262d;color:#8b949e;margin-left:auto}
+.card-body{font-size:.88rem;line-height:1.6;color:#c9d1d9}
+.card-body .highlight{color:#58a6ff}
+.card-body .success{color:#3fb950}
+.card-body .warn{color:#d29922}
+.card-body .error{color:#f85149}
+.card-body code{background:#0d1117;padding:.1rem .3rem;border-radius:4px;font-size:.8rem;color:#ffa657}
+.card-body pre{background:#0d1117;padding:.75rem;border-radius:6px;border:1px solid #21262d;overflow-x:auto;font-size:.78rem;line-height:1.5;margin:.5rem 0}
+.card-body pre .cm{color:#8b949e}
+.card-body pre .cmd{color:#ffa657}
+.card-body pre .out{color:#7ee787}
+
+/* Log area */
+.log{background:#0d1117;border:1px solid #21262d;border-radius:6px;padding:1rem;font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace;font-size:.78rem;line-height:1.6;max-height:200px;overflow-y:auto;margin-bottom:1rem}
+.log.hidden{display:none}
+.log .line{opacity:0;animation:fadeUp .4s forwards}
+.log .info{color:#58a6ff}
+.log .scan{color:#79c0ff}
+.log .ok{color:#3fb950}
 .log .success{color:#3fb950}
-    52|.log .warn{color:#d29922}
-    53|.log .err{color:#f85149}
-    54|.log .audit{color:#d2a8ff}
-    55|.log .merge{color:#3fb950;font-weight:600}
-    56|@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
-    57|
-    58|/* Badges */
-    59|.badge{display:inline-block;font-size:.65rem;padding:.15rem .45rem;border-radius:10px;margin-right:.25rem}
-    60|.badge-green{background:#1a4a2a;color:#3fb950}
-    61|.badge-blue{background:#1f3a5f;color:#58a6ff}
-    62|.badge-yellow{background:#3a2a1a;color:#d29922}
+.log .warn{color:#d29922}
+.log .err{color:#f85149}
+.log .audit{color:#d2a8ff}
+.log .merge{color:#3fb950;font-weight:600}
+@keyframes fadeUp{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* Badges */
+.badge{display:inline-block;font-size:.65rem;padding:.15rem .45rem;border-radius:10px;margin-right:.25rem}
+.badge-green{background:#1a4a2a;color:#3fb950}
+.badge-blue{background:#1f3a5f;color:#58a6ff}
+.badge-yellow{background:#3a2a1a;color:#d29922}
 .ring-badge{display:inline-flex;align-items:center;gap:.3rem;padding:.15rem .6rem;border-radius:12px;font-size:.7rem;font-weight:600;margin-left:.5rem}
 .ring-1{background:rgba(88,166,255,.15);color:#58a6ff;border:1px solid rgba(88,166,255,.3)}
 .ring-2{background:rgba(210,168,255,.15);color:#d2a8ff;border:1px solid rgba(210,168,255,.3)}
 .ring-3{background:rgba(63,185,80,.15);color:#3fb950;border:1px solid rgba(63,185,80,.3)}
-    63|.badge-red{background:#4a1a1a;color:#f85149}
-    64|
-    65|/* Check rows */
-    66|.check-row{display:flex;align-items:center;gap:.5rem;padding:.4rem 0;border-bottom:1px solid #21262d}
-    67|.check-row:last-child{border-bottom:none}
-    68|.check-row .status{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0}
-    69|.status-pass{background:#1a4a2a;color:#3fb950}
-    70|.status-fail{background:#4a1a1a;color:#f85149}
-    71|
-    72|/* Controls */
-    73|.controls{display:flex;gap:.5rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap}
-    74|.btn{padding:.6rem 1.5rem;border-radius:6px;border:1px solid #30363d;background:#21262d;color:#c9d1d9;font-size:.85rem;cursor:pointer;transition:all .2s}
-    75|.btn:hover{background:#30363d;border-color:#58a6ff}
-    76|.btn-primary{background:#238636;border-color:#2ea043;color:#fff}
-    77|.btn-primary:hover{background:#2ea043}
-    78|.hidden{display:none}
-    79|.fade-in{animation:fadeIn .5s ease}
-    80|@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    81|
-    82|/* Stats inline */
-    83|.stat-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin:.75rem 0}
-    84|.stat-item{text-align:center}
-    85|.stat-num{font-size:1.4rem;font-weight:800;color:#58a6ff;font-variant-numeric:tabular-nums}
-    86|.stat-lbl{font-size:.6rem;color:#8b949e;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
-    87|.node-graph{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
+.badge-red{background:#4a1a1a;color:#f85149}
+
+/* Check rows */
+.check-row{display:flex;align-items:center;gap:.5rem;padding:.4rem 0;border-bottom:1px solid #21262d}
+.check-row:last-child{border-bottom:none}
+.check-row .status{width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:.7rem;flex-shrink:0}
+.status-pass{background:#1a4a2a;color:#3fb950}
+.status-fail{background:#4a1a1a;color:#f85149}
+
+/* Controls */
+.controls{display:flex;gap:.5rem;justify-content:center;margin-top:1.5rem;flex-wrap:wrap}
+.btn{padding:.6rem 1.5rem;border-radius:6px;border:1px solid #30363d;background:#21262d;color:#c9d1d9;font-size:.85rem;cursor:pointer;transition:all .2s}
+.btn:hover{background:#30363d;border-color:#58a6ff}
+.btn-primary{background:#238636;border-color:#2ea043;color:#fff}
+.btn-primary:hover{background:#2ea043}
+.hidden{display:none}
+.fade-in{animation:fadeIn .5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* Stats inline */
+.stat-row{display:flex;gap:1.5rem;flex-wrap:wrap;margin:.75rem 0}
+.stat-item{text-align:center}
+.stat-num{font-size:1.4rem;font-weight:800;color:#58a6ff;font-variant-numeric:tabular-nums}
+.stat-lbl{font-size:.6rem;color:#8b949e;text-transform:uppercase;letter-spacing:.08em;margin-top:2px}
+.node-graph{display:flex;align-items:center;justify-content:center;gap:.5rem;flex-wrap:wrap;margin:1rem 0}
 .node-item{display:flex;flex-direction:column;align-items:center;padding:.5rem .75rem;border:1px solid #30363d;border-radius:6px;background:#0d1117;font-size:.75rem}
 .node-item .num{font-size:.6rem;color:#8b949e}
 .arrow{color:#30363d;font-size:1.2rem}
 </style>
-    88|</head>
-    89|<body>
-    90|
-    91|<h1>⚡ 工业 RAG 知识库：自我演进旅程</h1>
-    92|<p class="subtitle">从 190 份 FANUC PDF 到 200,752 向量 — Bad Case 驱动自进化</p>
+</head>
+<body>
+
+<h1>⚡ 工业 RAG 知识库：自我演进旅程</h1>
+<p class="subtitle">从 190 份 FANUC PDF 到 200,752 向量 — Bad Case 驱动自进化</p>
 <div style="text-align:center;margin-bottom:0.75rem;"><span style="display:inline-block;padding:0.2rem 0.8rem;border:1px solid #30363d;border-radius:12px;font-size:0.7rem;color:#8b949e;background:#0d1117;">📊 实时演进记录 (数据截至 2026-06-16)</span></div>
-    93|
-    94|<div class="container">
-    95|  <div class="progress-bar" id="progressBar"></div>
-    96|  <div id="cardArea" class="card"></div>
-    97|  <div id="logArea" class="log hidden"></div>
-    98|  <div class="controls" id="controls"></div>
-    99|</div>
-   100|
-   101|<script>
-   102|const STEPS = [
-   103|  { id: 'genesis',    label: 'PDF 入库',     icon: '📄' },
-   104|  { id: 'retrieval',  label: '混合检索',     icon: '🔍' },
-   105|  { id: 'badcase',    label: '触发 Bad Case', icon: '❌' },
-   106|  { id: 'normalize',  label: '查询规范化',   icon: '🔤' },
-   107|  { id: 'audit',      label: '每日巡检',     icon: '🛡️' },
-   108|  { id: 'docs',       label: '专题文档',     icon: '📝' },
-   109|  { id: 'verify',     label: '交叉验证',     icon: '🔬' },
-   110|  { id: 'evolved',    label: '演进完成',     icon: '🎉' },
-   111|];
-   112|
-   113|let currentStep = -1;
-   114|let autoMode = false;
-   115|let autoTimer = null;
-   116|
-   117|function renderProgress() {
-   118|  const bar = document.getElementById('progressBar');
-   119|  bar.innerHTML = STEPS.map((s, i) => `
-   120|    <div class="step-dot ${i < currentStep ? 'done' : i === currentStep ? 'active' : ''}">
-   121|      <div class="dot">${i < currentStep ? '✓' : i === currentStep ? s.icon : ''}</div>
-   122|      <div class="dot-label">${s.label}</div>
-   123|    </div>
-   124|  `).join('');
-   125|}
-   126|
-   127|function addLog(msg, type) {
-   128|  const area = document.getElementById('logArea');
-   129|  area.classList.remove('hidden');
-   130|  const div = document.createElement('div');
-   131|  if (!type) {
-   132|    if (/Audit|审计|巡检|Score/i.test(msg)) type = 'audit';
-   133|    else if (/Scan|扫描|检索|Retrieval|RRF/i.test(msg)) type = 'scan';
-   134|    else if (/✅|pass|Success|完成|命中|CONFIRMED/i.test(msg)) type = 'ok';
-   135|    else if (/❌|fail|Error|CONTRADICTED|未命中/i.test(msg)) type = 'err';
-   136|    else if (/⚠|warn|WARN|待确认|NEEDS REVIEW/i.test(msg)) type = 'warn';
-   137|    else type = 'info';
-   138|  }
-   139|  div.className = `line ${type}`;
-   140|  div.textContent = msg;
-   141|  area.appendChild(div);
-   142|  area.scrollTop = area.scrollHeight;
-   143|}
-   144|
-   145|function clearLog() {
-   146|  const area = document.getElementById('logArea');
-   147|  area.innerHTML = '';
-   148|  area.classList.add('hidden');
-   149|}
-   150|
-   151|function renderStep(idx) {
-   152|  const card = document.getElementById('cardArea');
-   153|  card.classList.remove('fade-in');
-   154|  void card.offsetWidth;
-   155|  card.classList.add('fade-in');
-   156|  currentStep = idx;
-   157|  renderProgress();
-   158|  updateControls();
-   159|
-   160|  const s = STEPS[idx];
-   161|  switch (s.id) {
-   162|    case 'genesis':   renderGenesis(card); break;
-   163|    case 'retrieval': renderRetrieval(card); break;
-   164|    case 'badcase':   renderBadCase(card); break;
-   165|    case 'normalize': renderNormalize(card); break;
-   166|    case 'audit':     renderAudit(card); break;
-   167|    case 'docs':      renderDocs(card); break;
-   168|    case 'verify':    renderVerify(card); break;
-   169|    case 'evolved':   renderEvolved(card); break;
-   170|  }
-   171|}
-   172|
-   173|function renderGenesis(card) {
-   174|  addLog('[Pipeline] 导入 190 份 FANUC PDF 手册...');
-   175|  setTimeout(() => addLog('[Pipeline] pymupdf4llm 提取文本 → 分块 → BGE-base-zh-v1.5 嵌入 (768维, CPU)'), 300);
-   176|  setTimeout(() => addLog('[Pipeline] ChromaDB cosine 存储 → 200,715 chunks'), 600);
-   177|  setTimeout(() => addLog('[Pipeline] p2b 质检门禁: 污染检查 + 品牌过滤 (排除 KUKA/ABB/安川)'), 900);
-   178|  setTimeout(() => addLog('[Pipeline] 4 通道 LLM: MiMo-Flash → MiMo-Pro → DeepSeek → Qwen2.5:3B'), 1200);
-   179|  setTimeout(() => addLog('✅ 知识库就绪。向量数: 200,715 | Good: 54% | Bad: 34%'), 1500);
-   180|
-   181|  card.innerHTML = `
-   182|    <div class="card-header">
-   183|      <div class="icon" style="background:#1f3a5f">📄</div>
-   184|      <div class="name">Phase 1 — 向量库建设</div>
-   185|      <span class="tag">2026-03 ~ 04</span>
-   186|    </div>
-   187|    <div class="card-body">
-   188|      <p>将 <span class="highlight">190 份 FANUC PDF</span> 技术手册导入向量知识库。</p>
-   189|      <div class="stat-row">
-   190|        <div class="stat-item"><div class="stat-num">190</div><div class="stat-lbl">PDF 源文档</div></div>
-   191|        <div class="stat-item"><div class="stat-num">200,715</div><div class="stat-lbl">向量 Chunks</div></div>
-   192|        <div class="stat-item"><div class="stat-num">768d</div><div class="stat-lbl">嵌入维度</div></div>
-   193|        <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">LLM 通道</div></div>
-   194|      </div>
-   195|      <pre><span class="cm"># 导入管线</span>
-   196|<span class="cmd">rag_builder.py</span>    → PDF 提取 + 分块 + 嵌入
-   197|<span class="cmd">rag_builder_ocr.py</span> → PaddleOCR 增强扫描件
-   198|<span class="cmd">p2b_ingest_gate.py</span> → 入库前质检门禁
-   199|<span class="cmd">rag_import_fanuc.py</span> → FANUC 专用导入</pre>
-   200|      <p style="margin-top:.5rem">当前检索质量: Good 54% · <span class="error">Bad 34%</span> · 平均 top_score 0.74</p>
-   201|    </div>
-   202|  `;
-   203|}
-   204|
-   205|function renderRetrieval(card) {
-   206|  addLog('[检索] 用户提问: "SRVO-023 电机过热怎么处理？"');
-   207|  setTimeout(() => addLog('[检索] _normalize_query: SRVO-023 已规范化 (无需修正)'), 300);
-   208|  setTimeout(() => addLog('[检索] expand_query: +servo/驱动/放大器 +alarm/故障代码'), 600);
-   209|  setTimeout(() => addLog('[检索] 向量检索 top-20 + BM25 top-20 并行执行...'), 900);
-   210|  setTimeout(() => addLog('[检索] RRF 融合 (k=60): 向量 rank#1 + BM25 rank#1 → 0.950'), 1200);
-   211|  setTimeout(() => addLog('[检索] 实体精确搜索: SRVO-023 命中 entity_alarm_index → +0.30 加分'), 1500);
-   212|  setTimeout(() => addLog('✅ [1] 0.950 | B-83195CM_10.PDF — SRVO-023 负载超过额定值'), 1800);
-   213|  setTimeout(() => addLog('   [2] 0.880 | B-83284CM-1_08.PDF — 报警代码手册'), 1950);
-   214|
-   215|  card.innerHTML = `
-   216|    <div class="card-header">
-   217|      <div class="icon" style="background:#1a4a2a">🔍</div>
-   218|      <div class="name">BM25 + 向量混合检索</div>
-   219|      <span class="tag">2026-05</span>
-   220|    </div>
-   221|    <div class="card-body">
-   222|      <p><span class="highlight">RRF (Reciprocal Rank Fusion)</span> 双通道融合排序。</p>
-   223|      <pre><span class="cm"># 检索管线</span>
-   224|<span class="cmd">_normalize_query()</span>  → 型号/报警码规范化
-   225|<span class="cmd">expand_query()</span>     → 同义词扩展 (30+ 组)
-   226|<span class="cmd">Vector top-20</span>      → bge-base-zh-v1.5 语义
-   227|<span class="cmd">BM25 top-20</span>        → jieba 分词 + BM25Okapi
-   228|<span class="cmd">RRF fusion</span>         → rank → 1/(60+rank) 归一化
-   229|<span class="cmd">entity_alarm_search</span>→ 报警代码精确匹配 +0.30</pre>
-   230|      <div class="stat-row">
-   231|        <div class="stat-item"><div class="stat-num">20</div><div class="stat-lbl">BM25 候选</div></div>
-   232|        <div class="stat-item"><div class="stat-num">20</div><div class="stat-lbl">向量候选</div></div>
-   233|        <div class="stat-item"><div class="stat-num">60</div><div class="stat-lbl">RRF k 常数</div></div>
-   234|      </div>
-   235|    </div>
-   236|  `;
-   237|}
-   238|
-   239|function renderBadCase(card) {
-   240|  addLog('[查询] "法那科机器人SRVO023电机过热"');
-   241|  setTimeout(() => addLog('[查询] ⚠️ 未规范化: "法那科" 不在别名表 → 检索失败'), 300);
-   242|  setTimeout(() => addLog('[查询] top_score = 0.420 < 阈值 0.6'), 600);
-   243|  setTimeout(() => addLog('❌ Bad Case 触发! 用户收到低质量回答'), 900);
-   244|  setTimeout(() => addLog('[日志] 写入 badcase_pending.jsonl...'), 1200);
-   245|  setTimeout(() => addLog('[分析] Bad Case 根因分布:'), 1500);
-   246|  setTimeout(() => addLog('   A类 知识库无内容: 38%  (可补文档)'), 1700);
-   247|  setTimeout(() => addLog('   B类 对比型问题:   21%  (可补专题)'), 1900);
-   248|  setTimeout(() => addLog('   C类 无效查询:     31%  (可过滤)'), 2100);
-   249|  setTimeout(() => addLog('   D类 口语化查询:   10%  (可规范化)'), 2300);
-   250|
-   251|  card.innerHTML = `
-   252|    <div class="card-header">
-   253|      <div class="icon" style="background:#4a1a1a">❌</div>
-   254|      <div class="name">Bad Case — 口语化查询导致检索失败</div>
-   255|      <span class="tag">触发修复</span>
-   256|    </div>
-   257|    <div class="card-body">
-   258|      <p>工程师用口语提问 <span class="error">"法那科"</span> 而非标准名 <span class="highlight">"FANUC"</span>，向量检索语义鸿沟导致 top_score 低于阈值。</p>
-   259|      <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:1rem;margin:.75rem 0">
-   260|        <div style="font-weight:600;color:#f85149;margin-bottom:.5rem">Bad Case 根因分析</div>
-   261|        <div class="check-row"><div class="status status-fail">A</div><div>知识库无对应内容 — 38% (CR机器人/安全功能/选型文档缺失)</div></div>
-   262|        <div class="check-row"><div class="status status-fail">B</div><div>对比/综合型问题 — 21% (文档结构缺陷，无专题对比)</div></div>
-   263|        <div class="check-row"><div class="status status-fail">C</div><div>无效/重复查询 — 31% (题库噪音，非真实场景)</div></div>
-   264|        <div class="check-row"><div class="status status-fail">D</div><div>口语化查询 — 10% (法那科/Fanuc/M900 等非标写法)</div></div>
-   265|      </div>
-   266|      <p>驱动修复: <span class="highlight">查询规范化</span> + <span class="highlight">专题文档补全</span> + <span class="highlight">每日巡检</span></p>
-   267|    </div>
-   268|  `;
-   269|}
-   270|
-   271|function renderNormalize(card) {
-   272|  addLog('[修复] _normalize_query 新增中文别名映射...');
-   273|  setTimeout(() => addLog('   法那科 → FANUC | 发那科 → FANUC | 法兰克 → FANUC'), 300);
-   274|  setTimeout(() => addLog('   CR35iA → CR-35iA | CR7iA → CR-7iA'), 600);
-   275|  setTimeout(() => addLog('   FANUCM-900 → FANUC M-900 (补空格)'), 900);
-   276|  setTimeout(() => addLog('[修复] synonyms.json 新增 10 组同义词...'), 1200);
-   277|  setTimeout(() => addLog('   协作机器人/cobot/CR系列 | DCS/双检安全/safety speed'), 1400);
-   278|  setTimeout(() => addLog('   工具坐标系/UTOOL/tool frame | 干伸长度/stick-out'), 1600);
-   279|  setTimeout(() => addLog('   起弧/arc start | 收弧/arc end'), 1800);
-   280|  setTimeout(() => addLog('[验证] "法那科机器人SRVO023" → "FANUC机器人SRVO-023"'), 2100);
-   281|  setTimeout(() => addLog('✅ 检索命中: 0.950 | B-83195CM_10.PDF'), 2400);
-   282|
-   283|  card.innerHTML = `
-   284|    <div class="card-header">
-   285|      <div class="icon" style="background:#3a2a1a">🔤</div>
-   286|      <div class="name">查询规范化 + 同义词扩展</div>
-   287|      <span class="tag">2026-06-15</span>
-   288|    </div>
-   289|    <div class="card-body">
-   290|      <p>从 Bad Case 驱动的 <span class="highlight">NLP 规范化增强</span>。</p>
-   291|      <pre><span class="cm"># _normalize_query 新增</span>
-   292|<span class="cmd">_CHINESE_ALIASES</span>  → 法那科/发那科/法兰克 → FANUC
-   293|<span class="cmd">CR 系列正则</span>      → CR35iA → CR-35iA
-   294|<span class="cmd">FANUC 空格补全</span>   → FANUCM-900 → FANUC M-900
-   295|
-   296|<span class="cm"># synonyms.json 新增</span>
-   297|协作机器人(cobot) | DCS(双检安全) | 工具坐标系(UTOOL)
-   298|干伸长度(stick-out) | 起弧(arc start) | 收弧(arc end)</pre>
-   299|      <div class="stat-row">
-   300|        <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">中文别名</div></div>
-   301|        <div class="stat-item"><div class="stat-num">10</div><div class="stat-lbl">新同义词组</div></div>
-   302|        <div class="stat-item"><div class="stat-num">6</div><div class="stat-lbl">补全占位符</div></div>
-   303|      </div>
-   304|    </div>
-   305|  `;
-   306|}
-   307|
-   308|function renderAudit(card) {
-   309|  addLog('[巡检] daily_audit.py — 每日 6:00 自动执行');
-   310|  setTimeout(() => addLog('[巡检] 抽取 8 题 (L1: 2 + L2: 3 + L3: 3), 30 天不重复'), 300);
-   311|  setTimeout(() => addLog('[巡检] ✅ L3-022 [选型] score=0.731 — 弧焊机器人选型参数'), 600);
-   312|  setTimeout(() => addLog('[巡检] ✅ L3-007 [故障排查] score=0.795 — 弧焊起弧失败排查'), 800);
-   313|  setTimeout(() => addLog('[巡检] ✅ V2-005 [报警代码] score=0.950 — ARC146-149 焊接脉冲'), 1000);
-   314|  setTimeout(() => addLog('[巡检] ❌ V2-014 [坐标系] score=0.669 — UFrame/UTool 未命中关键词'), 1200);
-   315|  setTimeout(() => addLog('[巡检] → badcase_pending.jsonl 写入 1 条待审'), 1500);
-   316|  setTimeout(() => addLog('[巡检] 通过率: 7/8 (88%) | 报告: audit_2026-06-16.json'), 1800);
-   317|  setTimeout(() => addLog('✅ 飞书推送: HTTP 200'), 2000);
-   318|
-   319|  card.innerHTML = `
-   320|    <div class="card-header">
-   321|      <div class="icon" style="background:#1f3a5f">🛡️</div>
-   322|      <div class="name">每日巡检 — 263 题自动化审计</div>
-   323|      <span class="tag">cron 6:00</span>
-   324|    </div>
-   325|    <div class="card-body">
-   326|      <p>每日自动抽样审计，Bad Case 自动积累待审。</p>
-   327|      <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:1rem;margin:.75rem 0">
-   328|        <div class="check-row"><div class="status status-pass">✓</div><div>L3-022 [选型] score=0.731 — 弧焊机器人选型参数</div></div>
-   329|        <div class="check-row"><div class="status status-pass">✓</div><div>L3-007 [故障排查] score=0.795 — 弧焊起弧失败排查</div></div>
-   330|        <div class="check-row"><div class="status status-pass">✓</div><div>V2-005 [报警代码] score=0.950 — ARC146-149 焊接脉冲</div></div>
-   331|        <div class="check-row"><div class="status status-fail">✗</div><div>V2-014 [坐标系] score=0.669 — UFrame/UTool 未命中关键词</div></div>
-   332|      </div>
-   333|      <div class="stat-row">
-   334|        <div class="stat-item"><div class="stat-num">263</div><div class="stat-lbl">巡检题库</div></div>
-   335|        <div class="stat-item"><div class="stat-num">22</div><div class="stat-lbl">分类标签</div></div>
-   336|        <div class="stat-item"><div class="stat-num">88-100%</div><div class="stat-lbl">通过率</div></div>
-   337|      </div>
-   338|    </div>
-   339|  `;
-   340|}
-   341|
-   342|function renderDocs(card) {
-   343|  addLog('[文档] 从 PDF 原文提取安全功能内容...');
-   344|  setTimeout(() => addLog('[文档] B-83184CM_09.PDF (DCS手册) → 安全I/O/位置速度检查'), 300);
-   345|  setTimeout(() => addLog('[文档] B-83284CM-2_05.PDF (弧焊手册) → 碰撞检测功能'), 600);
-   346|  setTimeout(() => addLog('[文档] B-80687CM_16.PDF (安全手册) → 安全栅栏/急停'), 900);
-   347|  setTimeout(() => addLog('[文档] B-83744CM_01.PDF (CR手册) → 协同作业机器人功能'), 1200);
-   348|  setTimeout(() => addLog('[文档] 撰写 7 篇专题文档, 导入向量库 +27 chunks...'), 1500);
-   349|  setTimeout(() => addLog('✅ 向量库: 200,715 → 200,752 | 7 篇专题文档就绪'), 1800);
-   350|
-   351|  card.innerHTML = `
-   352|    <div class="card-header">
-   353|      <div class="icon" style="background:#1a4a2a">📝</div>
-   354|      <div class="name">7 篇安全/工艺专题文档</div>
-   355|      <span class="tag">2026-06-15</span>
-   356|    </div>
-   357|    <div class="card-body">
-   358|      <p>从 PDF 手册提取关键内容，撰写结构化专题文档填补知识空白。</p>
-   359|      <pre><span class="cm"># 7 篇专题文档 (共 37 chunks)</span>
-   360|<span class="out">FANUC安全信号体系.md</span>        ← FENCE/SAFE/DCS/E-Stop 对比
-   361|<span class="out">FANUC碰撞检测功能.md</span>        ← Collision Guard 灵敏度/配置
-   362|<span class="out">FANUC_DCS安全功能配置.md</span>    ← 密码/安全领域/速度检查
-   363|<span class="out">FANUC协同作业机器人CR系列.md</span> ← 碰触停止/退避/负载切换
-   364|<span class="out">FANUC焊接参数与缺陷关系.md</span>  ← 参数-缺陷矩阵
-   365|<span class="out">FANUC坐标系对比与应用.md</span>    ← 5种坐标系对比
-   366|<span class="out">FANUC工业通信协议对比.md</span>    ← CC-Link/EtherNet-IP/PROFINET</pre>
-   367|    </div>
-   368|  `;
-   369|}
-   370|
-   371|function renderVerify(card) {
-   372|  addLog('[验证] 28 项技术断言 vs PDF 原文交叉比对...');
-   373|  setTimeout(() => addLog('[验证] "DCS 安全等级 类别4 PL e SIL 3" → 3 篇文档一致 ✅ CONFIRMED'), 300);
-   374|  setTimeout(() => addLog('[验证] "碰撞检测不是安全功能" → 3 篇文档一致 ✅ CONFIRMED'), 600);
-   375|  setTimeout(() => addLog('[验证] "SIR[1] = SPI[1] AND SPI[2]" → 2 篇文档一致 ✅ CONFIRMED'), 900);
-   376|  setTimeout(() => addLog('⚠️ [验证] "DCS 关节位置检查最大数 40" → PDF 未直接命中 ⚠️ NEEDS REVIEW'), 1200);
-   377|  setTimeout(() => addLog('❌ [验证] "SRVO-002 安全门打开" → PDF 确认为"示教器紧急停止" ❌ CONTRADICTED'), 1500);
-   378|  setTimeout(() => addLog('[修复] SRVO-002 描述已修正为"示教器紧急停止"'), 1800);
-   379|  setTimeout(() => addLog('✅ 交叉验证完成: 19 确认 / 8 待查 / 1 修复'), 2100);
-   380|
-   381|  card.innerHTML = `
-   382|    <div class="card-header">
-   383|      <div class="icon" style="background:#3a2a1a">🔬</div>
-   384|      <div class="name">交叉验证 — 28 项断言 vs PDF 原文</div>
-   385|      <span class="tag">anti-pollution</span>
-   386|    </div>
-   387|    <div class="card-body">
-   388|      <p>每篇文档的关键断言逐条比对 PDF 原文，<span class="warn">防止 AI 生成噪音污染知识库</span>。</p>
-   389|      <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:1rem;margin:.75rem 0">
-   390|        <div class="check-row"><div class="status status-pass">✓</div><div>19 项 CONFIRMED — DCS 安全等级、SIR/SPO 信号、报警代码等</div></div>
-   391|        <div class="check-row"><div class="status" style="background:#3a2a1a;color:#d29922">?</div><div>8 项 NEEDS REVIEW — PDF 未直接命中，需人工确认</div></div>
-   392|        <div class="check-row"><div class="status status-fail">✗</div><div>1 项 CONTRADICTED — SRVO-002 描述错误，已修复</div></div>
-   393|      </div>
-   394|      <p>安全关键原则：<span class="error">AI 生成的文档必须与 PDF 原文交叉验证</span>，不允许未验证的断言进入生产知识库。</p>
-   395|    </div>
-   396|  `;
-   397|}
-   398|
-   399|function renderEvolved(card) {
-   400|  addLog('[系统] 向量库: 200,752 chunks | 巡检题库: 263 题 | 专题文档: 7 篇');
-   401|  setTimeout(() => addLog('[系统] 检索方式: BM25+向量 RRF | 同义词: 46+ 组 | 查询规范化: 中文别名+CR系列'), 300);
-   402|  setTimeout(() => addLog('[系统] 4 通道 LLM 容灾 | 飞书 Bot + 微信 Bot + Web UI'), 600);
-   403|  setTimeout(() => addLog('[系统] 每日巡检 88%-100% | badcase_pending 自动积累'), 900);
-   404|  setTimeout(() => addLog('[系统] Bad Case → 规范化/专题文档/巡检题 → 知识库演进'), 1200);
-   405|  setTimeout(() => addLog('✅ 工业 RAG 知识库自进化闭环完成'), 1500);
-   406|
-   407|  card.innerHTML = `
-   408|    <div class="card-header">
-   409|      <div class="icon" style="background:#1a4a2a">🎉</div>
-   410|      <div class="name">演进完成 — Bad Case 驱动的自进化闭环</div>
-   411|      <span class="tag">current state</span>
-   412|    </div>
-   413|    <div class="card-body">
-   414|      <p>从 190 份 PDF 到 200,752 向量的自进化系统。</p>
-   415|      <div class="stat-row">
-   416|        <div class="stat-item"><div class="stat-num">190</div><div class="stat-lbl">PDF</div></div>
-   417|        <div class="stat-item"><div class="stat-num">200,752</div><div class="stat-lbl">Chunks</div></div>
-   418|        <div class="stat-item"><div class="stat-num">263</div><div class="stat-lbl">巡检题</div></div>
-   419|        <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">专题文档</div></div>
-   420|        <div class="stat-item"><div class="stat-num">46+</div><div class="stat-lbl">同义词组</div></div>
-   421|      </div>
-   422|      <pre><span class="cm"># 自进化闭环</span>
-   423|<span class="out">Bad Case</span> → 查询规范化 + 同义词扩展
-   424|         → 专题文档补全 + 交叉验证
-   425|         → 巡检题库扩展 + 质量监控
-   426|         → 知识库持续演进</pre>
-   427|      <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
-   428|        <div class="node-graph">
+
+<div class="container">
+  <div class="progress-bar" id="progressBar"></div>
+  <div id="cardArea" class="card"></div>
+  <div id="logArea" class="log hidden"></div>
+  <div class="controls" id="controls"></div>
+</div>
+
+<script>
+const STEPS = [
+  { id: 'genesis',    label: 'PDF 入库',     icon: '📄' },
+  { id: 'retrieval',  label: '混合检索',     icon: '🔍' },
+  { id: 'badcase',    label: '触发 Bad Case', icon: '❌' },
+  { id: 'normalize',  label: '查询规范化',   icon: '🔤' },
+  { id: 'audit',      label: '每日巡检',     icon: '🛡️' },
+  { id: 'docs',       label: '专题文档',     icon: '📝' },
+  { id: 'verify',     label: '交叉验证',     icon: '🔬' },
+  { id: 'evolved',    label: '演进完成',     icon: '🎉' },
+];
+
+let currentStep = -1;
+let autoMode = false;
+let autoTimer = null;
+
+function renderProgress() {
+  const bar = document.getElementById('progressBar');
+  bar.innerHTML = STEPS.map((s, i) => `
+    <div class="step-dot ${i < currentStep ? 'done' : i === currentStep ? 'active' : ''}">
+      <div class="dot">${i < currentStep ? '✓' : i === currentStep ? s.icon : ''}</div>
+      <div class="dot-label">${s.label}</div>
+    </div>
+  `).join('');
+}
+
+function addLog(msg, type) {
+  const area = document.getElementById('logArea');
+  area.classList.remove('hidden');
+  const div = document.createElement('div');
+  if (!type) {
+    if (/Audit|审计|巡检|Score/i.test(msg)) type = 'audit';
+    else if (/Scan|扫描|检索|Retrieval|RRF/i.test(msg)) type = 'scan';
+    else if (/✅|pass|Success|完成|命中|CONFIRMED/i.test(msg)) type = 'ok';
+    else if (/❌|fail|Error|CONTRADICTED|未命中/i.test(msg)) type = 'err';
+    else if (/⚠|warn|WARN|待确认|NEEDS REVIEW/i.test(msg)) type = 'warn';
+    else type = 'info';
+  }
+  div.className = `line ${type}`;
+  div.textContent = msg;
+  area.appendChild(div);
+  area.scrollTop = area.scrollHeight;
+}
+
+function clearLog() {
+  const area = document.getElementById('logArea');
+  area.innerHTML = '';
+  area.classList.add('hidden');
+}
+
+function renderStep(idx) {
+  const card = document.getElementById('cardArea');
+  card.classList.remove('fade-in');
+  void card.offsetWidth;
+  card.classList.add('fade-in');
+  currentStep = idx;
+  renderProgress();
+  updateControls();
+
+  const s = STEPS[idx];
+  switch (s.id) {
+    case 'genesis':   renderGenesis(card); break;
+    case 'retrieval': renderRetrieval(card); break;
+    case 'badcase':   renderBadCase(card); break;
+    case 'normalize': renderNormalize(card); break;
+    case 'audit':     renderAudit(card); break;
+    case 'docs':      renderDocs(card); break;
+    case 'verify':    renderVerify(card); break;
+    case 'evolved':   renderEvolved(card); break;
+  }
+}
+
+function renderGenesis(card) {
+  addLog('[Pipeline] 导入 190 份 FANUC PDF 手册...');
+  setTimeout(() => addLog('[Pipeline] pymupdf4llm 提取文本 → 分块 → BGE-base-zh-v1.5 嵌入 (768维, CPU)'), 300);
+  setTimeout(() => addLog('[Pipeline] ChromaDB cosine 存储 → 200,715 chunks'), 600);
+  setTimeout(() => addLog('[Pipeline] p2b 质检门禁: 污染检查 + 品牌过滤 (排除 KUKA/ABB/安川)'), 900);
+  setTimeout(() => addLog('[Pipeline] 4 通道 LLM: MiMo-Flash → MiMo-Pro → DeepSeek → Qwen2.5:3B'), 1200);
+  setTimeout(() => addLog('✅ 知识库就绪。向量数: 200,715 | Good: 54% | Bad: 34%'), 1500);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#1f3a5f">📄</div>
+      <div class="name">Phase 1 — 向量库建设</div>
+      <span class="tag">2026-03 ~ 04</span>
+    </div>
+    <div class="card-body">
+      <p>将 <span class="highlight">190 份 FANUC PDF</span> 技术手册导入向量知识库。</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">190</div><div class="stat-lbl">PDF 源文档</div></div>
+        <div class="stat-item"><div class="stat-num">200,715</div><div class="stat-lbl">向量 Chunks</div></div>
+        <div class="stat-item"><div class="stat-num">768d</div><div class="stat-lbl">嵌入维度</div></div>
+        <div class="stat-item"><div class="stat-num">4</div><div class="stat-lbl">LLM 通道</div></div>
+      </div>
+      <pre><span class="cm"># 导入管线</span>
+<span class="cmd">rag_builder.py</span>    → PDF 提取 + 分块 + 嵌入
+<span class="cmd">rag_builder_ocr.py</span> → PaddleOCR 增强扫描件
+<span class="cmd">p2b_ingest_gate.py</span> → 入库前质检门禁
+<span class="cmd">rag_import_fanuc.py</span> → FANUC 专用导入</pre>
+      <p style="margin-top:.5rem">当前检索质量: Good 54% · <span class="error">Bad 34%</span> · 平均 top_score 0.74</p>
+    </div>
+  `;
+}
+
+function renderRetrieval(card) {
+  addLog('[检索] 用户提问: "SRVO-023 电机过热怎么处理？"');
+  setTimeout(() => addLog('[检索] _normalize_query: SRVO-023 已规范化 (无需修正)'), 300);
+  setTimeout(() => addLog('[检索] expand_query: +servo/驱动/放大器 +alarm/故障代码'), 600);
+  setTimeout(() => addLog('[检索] 向量检索 top-20 + BM25 top-20 并行执行...'), 900);
+  setTimeout(() => addLog('[检索] RRF 融合 (k=60): 向量 rank#1 + BM25 rank#1 → 0.950'), 1200);
+  setTimeout(() => addLog('[检索] 实体精确搜索: SRVO-023 命中 entity_alarm_index → +0.30 加分'), 1500);
+  setTimeout(() => addLog('✅ [1] 0.950 | B-83195CM_10.PDF — SRVO-023 负载超过额定值'), 1800);
+  setTimeout(() => addLog('   [2] 0.880 | B-83284CM-1_08.PDF — 报警代码手册'), 1950);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#1a4a2a">🔍</div>
+      <div class="name">BM25 + 向量混合检索</div>
+      <span class="tag">2026-05</span>
+    </div>
+    <div class="card-body">
+      <p><span class="highlight">RRF (Reciprocal Rank Fusion)</span> 双通道融合排序。</p>
+      <pre><span class="cm"># 检索管线</span>
+<span class="cmd">_normalize_query()</span>  → 型号/报警码规范化
+<span class="cmd">expand_query()</span>     → 同义词扩展 (30+ 组)
+<span class="cmd">Vector top-20</span>      → bge-base-zh-v1.5 语义
+<span class="cmd">BM25 top-20</span>        → jieba 分词 + BM25Okapi
+<span class="cmd">RRF fusion</span>         → rank → 1/(60+rank) 归一化
+<span class="cmd">entity_alarm_search</span>→ 报警代码精确匹配 +0.30</pre>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">20</div><div class="stat-lbl">BM25 候选</div></div>
+        <div class="stat-item"><div class="stat-num">20</div><div class="stat-lbl">向量候选</div></div>
+        <div class="stat-item"><div class="stat-num">60</div><div class="stat-lbl">RRF k 常数</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderBadCase(card) {
+  addLog('[查询] "法那科机器人SRVO023电机过热"');
+  setTimeout(() => addLog('[查询] ⚠️ 未规范化: "法那科" 不在别名表 → 检索失败'), 300);
+  setTimeout(() => addLog('[查询] top_score = 0.420 < 阈值 0.6'), 600);
+  setTimeout(() => addLog('❌ Bad Case 触发! 用户收到低质量回答'), 900);
+  setTimeout(() => addLog('[日志] 写入 badcase_pending.jsonl...'), 1200);
+  setTimeout(() => addLog('[分析] Bad Case 根因分布:'), 1500);
+  setTimeout(() => addLog('   A类 知识库无内容: 38%  (可补文档)'), 1700);
+  setTimeout(() => addLog('   B类 对比型问题:   21%  (可补专题)'), 1900);
+  setTimeout(() => addLog('   C类 无效查询:     31%  (可过滤)'), 2100);
+  setTimeout(() => addLog('   D类 口语化查询:   10%  (可规范化)'), 2300);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#4a1a1a">❌</div>
+      <div class="name">Bad Case — 口语化查询导致检索失败</div>
+      <span class="tag">触发修复</span>
+    </div>
+    <div class="card-body">
+      <p>工程师用口语提问 <span class="error">"法那科"</span> 而非标准名 <span class="highlight">"FANUC"</span>，向量检索语义鸿沟导致 top_score 低于阈值。</p>
+      <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:1rem;margin:.75rem 0">
+        <div style="font-weight:600;color:#f85149;margin-bottom:.5rem">Bad Case 根因分析</div>
+        <div class="check-row"><div class="status status-fail">A</div><div>知识库无对应内容 — 38% (CR机器人/安全功能/选型文档缺失)</div></div>
+        <div class="check-row"><div class="status status-fail">B</div><div>对比/综合型问题 — 21% (文档结构缺陷，无专题对比)</div></div>
+        <div class="check-row"><div class="status status-fail">C</div><div>无效/重复查询 — 31% (题库噪音，非真实场景)</div></div>
+        <div class="check-row"><div class="status status-fail">D</div><div>口语化查询 — 10% (法那科/Fanuc/M900 等非标写法)</div></div>
+      </div>
+      <p>驱动修复: <span class="highlight">查询规范化</span> + <span class="highlight">专题文档补全</span> + <span class="highlight">每日巡检</span></p>
+    </div>
+  `;
+}
+
+function renderNormalize(card) {
+  addLog('[修复] _normalize_query 新增中文别名映射...');
+  setTimeout(() => addLog('   法那科 → FANUC | 发那科 → FANUC | 法兰克 → FANUC'), 300);
+  setTimeout(() => addLog('   CR35iA → CR-35iA | CR7iA → CR-7iA'), 600);
+  setTimeout(() => addLog('   FANUCM-900 → FANUC M-900 (补空格)'), 900);
+  setTimeout(() => addLog('[修复] synonyms.json 新增 10 组同义词...'), 1200);
+  setTimeout(() => addLog('   协作机器人/cobot/CR系列 | DCS/双检安全/safety speed'), 1400);
+  setTimeout(() => addLog('   工具坐标系/UTOOL/tool frame | 干伸长度/stick-out'), 1600);
+  setTimeout(() => addLog('   起弧/arc start | 收弧/arc end'), 1800);
+  setTimeout(() => addLog('[验证] "法那科机器人SRVO023" → "FANUC机器人SRVO-023"'), 2100);
+  setTimeout(() => addLog('✅ 检索命中: 0.950 | B-83195CM_10.PDF'), 2400);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#3a2a1a">🔤</div>
+      <div class="name">查询规范化 + 同义词扩展</div>
+      <span class="tag">2026-06-15</span>
+    </div>
+    <div class="card-body">
+      <p>从 Bad Case 驱动的 <span class="highlight">NLP 规范化增强</span>。</p>
+      <pre><span class="cm"># _normalize_query 新增</span>
+<span class="cmd">_CHINESE_ALIASES</span>  → 法那科/发那科/法兰克 → FANUC
+<span class="cmd">CR 系列正则</span>      → CR35iA → CR-35iA
+<span class="cmd">FANUC 空格补全</span>   → FANUCM-900 → FANUC M-900
+
+<span class="cm"># synonyms.json 新增</span>
+协作机器人(cobot) | DCS(双检安全) | 工具坐标系(UTOOL)
+干伸长度(stick-out) | 起弧(arc start) | 收弧(arc end)</pre>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">5</div><div class="stat-lbl">中文别名</div></div>
+        <div class="stat-item"><div class="stat-num">10</div><div class="stat-lbl">新同义词组</div></div>
+        <div class="stat-item"><div class="stat-num">6</div><div class="stat-lbl">补全占位符</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAudit(card) {
+  addLog('[巡检] daily_audit.py — 每日 6:00 自动执行');
+  setTimeout(() => addLog('[巡检] 抽取 8 题 (L1: 2 + L2: 3 + L3: 3), 30 天不重复'), 300);
+  setTimeout(() => addLog('[巡检] ✅ L3-022 [选型] score=0.731 — 弧焊机器人选型参数'), 600);
+  setTimeout(() => addLog('[巡检] ✅ L3-007 [故障排查] score=0.795 — 弧焊起弧失败排查'), 800);
+  setTimeout(() => addLog('[巡检] ✅ V2-005 [报警代码] score=0.950 — ARC146-149 焊接脉冲'), 1000);
+  setTimeout(() => addLog('[巡检] ❌ V2-014 [坐标系] score=0.669 — UFrame/UTool 未命中关键词'), 1200);
+  setTimeout(() => addLog('[巡检] → badcase_pending.jsonl 写入 1 条待审'), 1500);
+  setTimeout(() => addLog('[巡检] 通过率: 7/8 (88%) | 报告: audit_2026-06-16.json'), 1800);
+  setTimeout(() => addLog('✅ 飞书推送: HTTP 200'), 2000);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#1f3a5f">🛡️</div>
+      <div class="name">每日巡检 — 263 题自动化审计</div>
+      <span class="tag">cron 6:00</span>
+    </div>
+    <div class="card-body">
+      <p>每日自动抽样审计，Bad Case 自动积累待审。</p>
+      <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:1rem;margin:.75rem 0">
+        <div class="check-row"><div class="status status-pass">✓</div><div>L3-022 [选型] score=0.731 — 弧焊机器人选型参数</div></div>
+        <div class="check-row"><div class="status status-pass">✓</div><div>L3-007 [故障排查] score=0.795 — 弧焊起弧失败排查</div></div>
+        <div class="check-row"><div class="status status-pass">✓</div><div>V2-005 [报警代码] score=0.950 — ARC146-149 焊接脉冲</div></div>
+        <div class="check-row"><div class="status status-fail">✗</div><div>V2-014 [坐标系] score=0.669 — UFrame/UTool 未命中关键词</div></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">263</div><div class="stat-lbl">巡检题库</div></div>
+        <div class="stat-item"><div class="stat-num">22</div><div class="stat-lbl">分类标签</div></div>
+        <div class="stat-item"><div class="stat-num">88-100%</div><div class="stat-lbl">通过率</div></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderDocs(card) {
+  addLog('[文档] 从 PDF 原文提取安全功能内容...');
+  setTimeout(() => addLog('[文档] B-83184CM_09.PDF (DCS手册) → 安全I/O/位置速度检查'), 300);
+  setTimeout(() => addLog('[文档] B-83284CM-2_05.PDF (弧焊手册) → 碰撞检测功能'), 600);
+  setTimeout(() => addLog('[文档] B-80687CM_16.PDF (安全手册) → 安全栅栏/急停'), 900);
+  setTimeout(() => addLog('[文档] B-83744CM_01.PDF (CR手册) → 协同作业机器人功能'), 1200);
+  setTimeout(() => addLog('[文档] 撰写 7 篇专题文档, 导入向量库 +27 chunks...'), 1500);
+  setTimeout(() => addLog('✅ 向量库: 200,715 → 200,752 | 7 篇专题文档就绪'), 1800);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#1a4a2a">📝</div>
+      <div class="name">7 篇安全/工艺专题文档</div>
+      <span class="tag">2026-06-15</span>
+    </div>
+    <div class="card-body">
+      <p>从 PDF 手册提取关键内容，撰写结构化专题文档填补知识空白。</p>
+      <pre><span class="cm"># 7 篇专题文档 (共 37 chunks)</span>
+<span class="out">FANUC安全信号体系.md</span>        ← FENCE/SAFE/DCS/E-Stop 对比
+<span class="out">FANUC碰撞检测功能.md</span>        ← Collision Guard 灵敏度/配置
+<span class="out">FANUC_DCS安全功能配置.md</span>    ← 密码/安全领域/速度检查
+<span class="out">FANUC协同作业机器人CR系列.md</span> ← 碰触停止/退避/负载切换
+<span class="out">FANUC焊接参数与缺陷关系.md</span>  ← 参数-缺陷矩阵
+<span class="out">FANUC坐标系对比与应用.md</span>    ← 5种坐标系对比
+<span class="out">FANUC工业通信协议对比.md</span>    ← CC-Link/EtherNet-IP/PROFINET</pre>
+    </div>
+  `;
+}
+
+function renderVerify(card) {
+  addLog('[验证] 28 项技术断言 vs PDF 原文交叉比对...');
+  setTimeout(() => addLog('[验证] "DCS 安全等级 类别4 PL e SIL 3" → 3 篇文档一致 ✅ CONFIRMED'), 300);
+  setTimeout(() => addLog('[验证] "碰撞检测不是安全功能" → 3 篇文档一致 ✅ CONFIRMED'), 600);
+  setTimeout(() => addLog('[验证] "SIR[1] = SPI[1] AND SPI[2]" → 2 篇文档一致 ✅ CONFIRMED'), 900);
+  setTimeout(() => addLog('⚠️ [验证] "DCS 关节位置检查最大数 40" → PDF 未直接命中 ⚠️ NEEDS REVIEW'), 1200);
+  setTimeout(() => addLog('❌ [验证] "SRVO-002 安全门打开" → PDF 确认为"示教器紧急停止" ❌ CONTRADICTED'), 1500);
+  setTimeout(() => addLog('[修复] SRVO-002 描述已修正为"示教器紧急停止"'), 1800);
+  setTimeout(() => addLog('✅ 交叉验证完成: 19 确认 / 8 待查 / 1 修复'), 2100);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#3a2a1a">🔬</div>
+      <div class="name">交叉验证 — 28 项断言 vs PDF 原文</div>
+      <span class="tag">anti-pollution</span>
+    </div>
+    <div class="card-body">
+      <p>每篇文档的关键断言逐条比对 PDF 原文，<span class="warn">防止 AI 生成噪音污染知识库</span>。</p>
+      <div style="background:#0d1117;border:1px solid #30363d;border-radius:6px;padding:1rem;margin:.75rem 0">
+        <div class="check-row"><div class="status status-pass">✓</div><div>19 项 CONFIRMED — DCS 安全等级、SIR/SPO 信号、报警代码等</div></div>
+        <div class="check-row"><div class="status" style="background:#3a2a1a;color:#d29922">?</div><div>8 项 NEEDS REVIEW — PDF 未直接命中，需人工确认</div></div>
+        <div class="check-row"><div class="status status-fail">✗</div><div>1 项 CONTRADICTED — SRVO-002 描述错误，已修复</div></div>
+      </div>
+      <p>安全关键原则：<span class="error">AI 生成的文档必须与 PDF 原文交叉验证</span>，不允许未验证的断言进入生产知识库。</p>
+    </div>
+  `;
+}
+
+function renderEvolved(card) {
+  addLog('[系统] 向量库: 200,752 chunks | 巡检题库: 263 题 | 专题文档: 7 篇');
+  setTimeout(() => addLog('[系统] 检索方式: BM25+向量 RRF | 同义词: 46+ 组 | 查询规范化: 中文别名+CR系列'), 300);
+  setTimeout(() => addLog('[系统] 4 通道 LLM 容灾 | 飞书 Bot + 微信 Bot + Web UI'), 600);
+  setTimeout(() => addLog('[系统] 每日巡检 88%-100% | badcase_pending 自动积累'), 900);
+  setTimeout(() => addLog('[系统] Bad Case → 规范化/专题文档/巡检题 → 知识库演进'), 1200);
+  setTimeout(() => addLog('✅ 工业 RAG 知识库自进化闭环完成'), 1500);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#1a4a2a">🎉</div>
+      <div class="name">演进完成 — Bad Case 驱动的自进化闭环</div>
+      <span class="tag">current state</span>
+    </div>
+    <div class="card-body">
+      <p>从 190 份 PDF 到 200,752 向量的自进化系统。</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">190</div><div class="stat-lbl">PDF</div></div>
+        <div class="stat-item"><div class="stat-num">200,752</div><div class="stat-lbl">Chunks</div></div>
+        <div class="stat-item"><div class="stat-num">263</div><div class="stat-lbl">巡检题</div></div>
+        <div class="stat-item"><div class="stat-num">7</div><div class="stat-lbl">专题文档</div></div>
+        <div class="stat-item"><div class="stat-num">46+</div><div class="stat-lbl">同义词组</div></div>
+      </div>
+      <pre><span class="cm"># 自进化闭环</span>
+<span class="out">Bad Case</span> → 查询规范化 + 同义词扩展
+         → 专题文档补全 + 交叉验证
+         → 巡检题库扩展 + 质量监控
+         → 知识库持续演进</pre>
+      <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
+        <div class="node-graph">
         <div class="node-item">PDF入库<div class="num">📄</div></div>
         <span class="arrow">→</span>
         <div class="node-item">混合检索<div class="num">🔍</div></div>
@@ -454,66 +454,65 @@
       </div>
 
       <a href="https://ikalus1988.github.io/" style="display:inline-flex;align-items:center;gap:.3rem;padding:.4rem .8rem;border:1px solid #30363d;border-radius:6px;color:#c9d1d9;text-decoration:none;font-size:.8rem;background:#0d1117">← 返回主页</a>
-   429|      </div>
-   430|    </div>
-   431|  `;
-   432|}
-   433|
-   434|function updateControls() {
-   435|  const c = document.getElementById('controls');
-   436|  const isLast = currentStep === STEPS.length - 1;
-   437|  const isFirst = currentStep === 0;
-   438|  c.innerHTML = `
-   439|    <button class="btn" onclick="goStep(-1)" ${isFirst ? 'disabled style="opacity:.4"' : ''}>← 上一步</button>
-   440|    ${!autoMode ?
-   441|      `<button class="btn" onclick="toggleAuto()">▶ 自动播放</button>` :
-   442|      `<button class="btn btn-primary" onclick="toggleAuto()">⏸ 暂停</button>`
-   443|    }
-   444|    <button class="btn btn-primary" onclick="goStep(1)" ${isLast ? 'disabled style="opacity:.5"' : ''}>下一步 →</button>
-   445|    ${isLast ? '<button class="btn" onclick="resetJourney()">🔄 重新开始</button>' : ''}
-   446|  `;
-   447|}
-   448|
-   449|function goStep(dir) {
-   450|  if (autoMode && dir > 0) stopAuto();
-   451|  const next = currentStep + dir;
-   452|  if (next < 0 || next >= STEPS.length) return;
-   453|  clearLog();
-   454|  renderStep(next);
-   455|}
-   456|
-   457|function toggleAuto() {
-   458|  if (autoMode) stopAuto();
-   459|  else startAuto();
-   460|}
-   461|
-   462|function startAuto() {
-   463|  autoMode = true;
-   464|  updateControls();
-   465|  if (currentStep >= STEPS.length - 1) { resetJourney(); return; }
-   466|  clearLog();
-   467|  renderStep(currentStep + 1);
-   468|  autoTimer = setTimeout(() => {
-   469|    if (currentStep < STEPS.length - 1 && autoMode) startAuto();
-   470|    else stopAuto();
-   471|  }, 3500);
-   472|}
-   473|
-   474|function stopAuto() {
-   475|  autoMode = false;
-   476|  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
-   477|  updateControls();
-   478|}
-   479|
-   480|function resetJourney() {
-   481|  stopAuto();
-   482|  clearLog();
-   483|  renderStep(0);
-   484|}
-   485|
-   486|// Init
-   487|renderStep(0);
-   488|</script>
-   489|</body>
-   490|</html>
-   491|
+      </div>
+    </div>
+  `;
+}
+
+function updateControls() {
+  const c = document.getElementById('controls');
+  const isLast = currentStep === STEPS.length - 1;
+  const isFirst = currentStep === 0;
+  c.innerHTML = `
+    <button class="btn" onclick="goStep(-1)" ${isFirst ? 'disabled style="opacity:.4"' : ''}>← 上一步</button>
+    ${!autoMode ?
+      `<button class="btn" onclick="toggleAuto()">▶ 自动播放</button>` :
+      `<button class="btn btn-primary" onclick="toggleAuto()">⏸ 暂停</button>`
+    }
+    <button class="btn btn-primary" onclick="goStep(1)" ${isLast ? 'disabled style="opacity:.5"' : ''}>下一步 →</button>
+    ${isLast ? '<button class="btn" onclick="resetJourney()">🔄 重新开始</button>' : ''}
+  `;
+}
+
+function goStep(dir) {
+  if (autoMode && dir > 0) stopAuto();
+  const next = currentStep + dir;
+  if (next < 0 || next >= STEPS.length) return;
+  clearLog();
+  renderStep(next);
+}
+
+function toggleAuto() {
+  if (autoMode) stopAuto();
+  else startAuto();
+}
+
+function startAuto() {
+  autoMode = true;
+  updateControls();
+  if (currentStep >= STEPS.length - 1) { resetJourney(); return; }
+  clearLog();
+  renderStep(currentStep + 1);
+  autoTimer = setTimeout(() => {
+    if (currentStep < STEPS.length - 1 && autoMode) startAuto();
+    else stopAuto();
+  }, 3500);
+}
+
+function stopAuto() {
+  autoMode = false;
+  if (autoTimer) { clearTimeout(autoTimer); autoTimer = null; }
+  updateControls();
+}
+
+function resetJourney() {
+  stopAuto();
+  clearLog();
+  renderStep(0);
+}
+
+// Init
+renderStep(0);
+</script>
+</body>
+</html>
