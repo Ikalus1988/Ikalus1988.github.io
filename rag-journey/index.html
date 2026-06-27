@@ -98,8 +98,8 @@ h1{font-size:1.5rem;font-weight:600;color:#58a6ff;margin-bottom:.25rem}
 <body>
 
 <h1>⚡ 工业 RAG 知识库：自我演进旅程</h1>
-<p class="subtitle">从 190 份 FANUC PDF 到 200,752 向量 — Bad Case 驱动自进化</p>
-<div style="text-align:center;margin-bottom:0.75rem;"><span style="display:inline-block;padding:0.2rem 0.8rem;border:1px solid #30363d;border-radius:12px;font-size:0.7rem;color:#8b949e;background:#0d1117;">📊 实时演进记录 (数据截至 2026-06-16)</span></div>
+<p class="subtitle">从 190 份 FANUC PDF 到 200,835 向量 — Bad Case 驱动自进化 + 环境迁移</p>
+<div style="text-align:center;margin-bottom:0.75rem;"><span style="display:inline-block;padding:0.2rem 0.8rem;border:1px solid #30363d;border-radius:12px;font-size:0.7rem;color:#8b949e;background:#0d1117;">📊 实时演进记录 (数据截至 2026-06-27，含迁移)</span></div>
 
 <div class="container">
   <div class="progress-bar" id="progressBar"></div>
@@ -118,6 +118,7 @@ const STEPS = [
   { id: 'docs',       label: '专题文档',     icon: '📝' },
   { id: 'verify',     label: '交叉验证',     icon: '🔬' },
   { id: 'evolved',    label: '演进完成',     icon: '🎉' },
+  { id: 'migration',  label: '环境迁移',     icon: '🚚' },
 ];
 
 let currentStep = -1;
@@ -177,6 +178,7 @@ function renderStep(idx) {
     case 'docs':      renderDocs(card); break;
     case 'verify':    renderVerify(card); break;
     case 'evolved':   renderEvolved(card); break;
+    case 'migration': renderMigration(card); break;
   }
 }
 
@@ -485,6 +487,37 @@ function goStep(dir) {
 function toggleAuto() {
   if (autoMode) stopAuto();
   else startAuto();
+}
+
+function renderMigration(card) {
+  addLog('[Migration] 源环境 hp 节点退役，打包 claude.tar.gz 导出全量配置...');
+  setTimeout(() => addLog('[Migration] clone self-grow-wiki，全局路径适配 /home/hp → /home/eric_jia'), 300);
+  setTimeout(() => addLog('[Migration] 飞书 Bot 切换：默认 → 正义 (cli_a93f971)'), 600);
+  setTimeout(() => addLog('[Migration] 解压 rag_chromadb.tar.gz (1.5GB) → 200,835 vectors 恢复'), 900);
+  setTimeout(() => addLog('[Migration] 批量召回率测试：194 条群历史 → 95.2% (排除 OOS)'), 1200);
+  setTimeout(() => addLog('[Migration] MCP v3 标准化：rag_search + rag_answer 双工具，新用户零侵入'), 1500);
+  setTimeout(() => addLog('[Migration] 质量飞轮部署：daily_audit cron 每日 6:00 + 题库 50 题'), 1800);
+  setTimeout(() => addLog('✅ 迁移完成。向量:200,835 | 召回率:95.2% | MCP v3 | LLM延迟&lt;30s'), 2100);
+
+  card.innerHTML = `
+    <div class="card-header">
+      <div class="icon" style="background:#1f3a5f">🚚</div>
+      <div class="name">Phase 7 — 环境迁移 & 标准化封装</div>
+      <span class="tag">2026-06-26 ~ 27</span>
+    </div>
+    <div class="card-body">
+      <p>从 <span class="highlight">hp WSL</span> 完整迁移到 <span class="highlight">eric_jia CodeWhale</span> 节点。</p>
+      <div class="stat-row">
+        <div class="stat-item"><div class="stat-num">200,835</div><div class="stat-lbl">向量（恢复）</div></div>
+        <div class="stat-item"><div class="stat-num">95.2%</div><div class="stat-lbl">召回率</div></div>
+        <div class="stat-item"><div class="stat-num">MCP v3</div><div class="stat-lbl">标准化</div></div>
+      </div>
+      <p style="margin-top:.5rem">新增 <span class="highlight">rag_mcp_server.py</span> — stdio 协议双工具封装，新用户注册即用，零侵入 Agent 源码。</p>
+      <p><span class="success">chunking 改进</span>：报警代码边界预处理<br>
+      <span class="success">品牌过滤修复</span>：对比类豁免<br>
+      <span class="success">查询增强</span>：自动 FANUC 语义锚定<br>
+      <span class="success">延迟优化</span>：Agent 自身 LLM 生成，目标 &lt;30s</p>
+    </div>`;
 }
 
 function startAuto() {
