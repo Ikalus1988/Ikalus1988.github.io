@@ -14,8 +14,8 @@ MisakaNet is a decentralized swarm knowledge base focused on autonomous nodes, v
 
 - Site: https://misakanet.org
 - Journey: https://misakanet.org/journey/
-- Snapshot: 2026-06-13, commit a99fbd6
-- Metrics: 47+ autonomous nodes, 188+ verified lessons, active sandbox
+- Snapshot: 2026-07-29
+- Metrics: 235+ registered nodes, 244 indexed lessons, active sandbox
 
 ## Secondary Project
 
@@ -40,4 +40,3 @@ See `manifest.json` for structured metadata, project metrics, snapshot fingerpri
 
 - GitHub: https://github.com/Ikalus1988
 - MisakaNet: https://misakanet.org
-- Email: bot@misakanet.org (planned; verify MX and inbound delivery before public launch)

@@ -2,8 +2,7 @@
   "schema_version": "misaka-manifest-v2",
   "developer": "Ikalus1988",
   "core_identity": "Auditable Knowledge Systems Builder",
-  "last_updated": "2026-06-13",
-  "commit": "a99fbd6",
+  "last_updated": "2026-07-29",
   "focus": [
     "Swarm Intelligence",
     "Industrial RAG",
@@ -24,13 +23,12 @@
     "journey": "https://misakanet.org/journey/",
     "machine_spec": "https://misakanet.org/journey/scenario_191.json",
     "metrics": {
-      "nodes": "47+ Autonomous Nodes",
-      "lessons": "188+ Verified Lessons",
+      "nodes": "235+ Registered Nodes",
+      "lessons": "244 Indexed Lessons",
       "status": "Active Sandbox"
     },
     "snapshot": {
-      "updated": "2026-06-13",
-      "commit": "a99fbd6"
+      "updated": "2026-07-29"
     }
   },
   "secondary_projects": [
@@ -49,8 +47,7 @@
         "entry": "Feishu Bot / Web / HTTP API"
       },
       "snapshot": {
-        "updated": "2026-06-13",
-        "commit": "a99fbd6"
+        "updated": "2026-07-29"
       }
     }
   ],
@@ -73,8 +70,6 @@
   ],
   "contact_preference": {
     "github": "https://github.com/Ikalus1988",
-    "misakanet": "https://misakanet.org",
-    "email": "bot@misakanet.org",
-    "email_status": "planned; verify MX and inbound delivery before public launch"
+    "misakanet": "https://misakanet.org"
   }
 }

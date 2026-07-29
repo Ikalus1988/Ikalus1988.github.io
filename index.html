@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Ikalus1988 — Auditable Knowledge Systems Builder.">
+  <meta name="description" content="Ikalus1988 — I build auditable knowledge systems for AI agents. MisakaNet, fatal-guard, industrial RAG.">
   <meta name="theme-color" content="#0d1117">
   <meta name="llms" content="llms.txt">
   <link rel="manifest" href="manifest.json">
@@ -12,9 +12,9 @@
     "@context": "https://schema.org",
     "@type": "Person",
     "name": "Ikalus1988",
-    "description": "Auditable Knowledge Systems Builder",
+    "description": "I build auditable knowledge systems for AI agents",
     "url": "https://ikalus1988.github.io",
-    "knowsAbout": ["Swarm Intelligence", "Industrial RAG", "Decentralized Knowledge Base", "Automation-Resistant Engineering"],
+    "knowsAbout": ["MCP Servers", "AI Agent Infrastructure", "Industrial RAG", "Failure Memory", "Automation-Resistant Engineering"],
     "mainEntityOfPage": {
       "@type": "WebSite",
       "name": "Ikalus1988 · Personal Hub",
@@ -22,7 +22,7 @@
     }
   }
   </script>
-  <title>Ikalus1988 · Auditable Knowledge Systems Builder</title>
+  <title>Ikalus1988 · AI Agent Infrastructure</title>
   <style>
     :root {
       color-scheme: dark;
@@ -38,6 +38,56 @@
       --warning: #d29922;
       --danger: #f85149;
       --shadow: rgba(1, 4, 9, 0.78);
+      --hero-g1: rgba(35, 134, 54, 0.12);
+      --hero-g2: rgba(88, 166, 255, 0.08);
+      --topbar-bg: rgba(13, 17, 23, 0.78);
+      --topbar-border: rgba(48, 54, 61, 0.5);
+      --card-bg: linear-gradient(180deg, rgba(22, 27, 34, 0.92), rgba(13, 17, 23, 0.88));
+      --card-flat: rgba(13, 17, 23, 0.74);
+      --card-input: rgba(13, 17, 23, 0.7);
+      --terminal-bg: rgba(1, 4, 9, 0.96);
+      --terminal-surface: rgba(13, 17, 23, 0.96);
+      --item-bg: rgba(22, 27, 34, 0.45);
+      --case-bg: rgba(22, 27, 34, 0.72);
+      --case-hover: rgba(35, 134, 54, 0.06);
+      --featured-bg: linear-gradient(135deg, rgba(35, 134, 54, 0.08), rgba(22, 27, 34, 0.72));
+      --featured-shadow: 0 0 24px rgba(35, 134, 54, 0.08);
+      --featured-hover-shadow: 0 0 32px rgba(35, 134, 54, 0.15);
+      --tag-bg: rgba(35, 134, 54, 0.1);
+      --chip-border: rgba(48, 54, 61, 0.65);
+    }
+
+    html[data-theme="light"] {
+      color-scheme: light;
+      --bg: #f6f8fa;
+      --surface: #ffffff;
+      --surface-2: #f0f3f6;
+      --border: #d1d9e0;
+      --text: #1f2328;
+      --muted: #656d76;
+      --green: #1a7f37;
+      --green-2: #116329;
+      --blue: #0969da;
+      --warning: #9a6700;
+      --danger: #cf222e;
+      --shadow: rgba(0, 0, 0, 0.08);
+      --hero-g1: rgba(26, 127, 55, 0.08);
+      --hero-g2: rgba(9, 105, 218, 0.06);
+      --topbar-bg: rgba(246, 248, 250, 0.82);
+      --topbar-border: rgba(209, 217, 224, 0.6);
+      --card-bg: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(246, 248, 250, 0.92));
+      --card-flat: rgba(255, 255, 255, 0.8);
+      --card-input: rgba(255, 255, 255, 0.7);
+      --terminal-bg: rgba(255, 255, 255, 0.97);
+      --terminal-surface: rgba(246, 248, 250, 0.97);
+      --item-bg: rgba(255, 255, 255, 0.6);
+      --case-bg: rgba(255, 255, 255, 0.7);
+      --case-hover: rgba(26, 127, 55, 0.06);
+      --featured-bg: linear-gradient(135deg, rgba(26, 127, 55, 0.06), rgba(255, 255, 255, 0.7));
+      --featured-shadow: 0 0 24px rgba(26, 127, 55, 0.06);
+      --featured-hover-shadow: 0 0 32px rgba(26, 127, 55, 0.12);
+      --tag-bg: rgba(26, 127, 55, 0.08);
+      --chip-border: rgba(209, 217, 224, 0.65);
     }
 
     * { box-sizing: border-box; }
@@ -51,8 +101,8 @@
       margin: 0;
       color: var(--text);
       background:
-        radial-gradient(circle at 15% 0%, rgba(35, 134, 54, 0.12), transparent 28rem),
-        radial-gradient(circle at 85% 10%, rgba(88, 166, 255, 0.08), transparent 24rem),
+        radial-gradient(circle at 15% 0%, var(--hero-g1), transparent 28rem),
+        radial-gradient(circle at 85% 10%, var(--hero-g2), transparent 24rem),
         var(--bg);
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
       line-height: 1.6;
@@ -78,8 +128,8 @@
       gap: 16px;
       padding: 14px 0;
       backdrop-filter: blur(16px);
-      background: rgba(13, 17, 23, 0.78);
-      border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+      background: var(--topbar-bg);
+      border-bottom: 1px solid var(--topbar-border);
     }
 
     .brand {
@@ -216,7 +266,7 @@
       display: block;
       color: var(--muted);
       border: 1px solid var(--border);
-      background: rgba(22, 27, 34, 0.45);
+      background: var(--item-bg);
       border-radius: 10px;
       padding: 10px 12px;
       overflow-wrap: anywhere;
@@ -272,7 +322,7 @@
     .card {
       border: 1px solid var(--border);
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(22, 27, 34, 0.92), rgba(13, 17, 23, 0.88));
+      background: var(--card-bg);
       box-shadow: 0 20px 70px var(--shadow);
       padding: 22px;
     }
@@ -304,7 +354,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 12px;
-      background: rgba(13, 17, 23, 0.74);
+      background: var(--card-flat);
       min-width: 0;
     }
 
@@ -351,7 +401,7 @@
       border-radius: 999px;
       padding: 8px 12px;
       color: var(--text);
-      background: rgba(13, 17, 23, 0.7);
+      background: var(--card-input);
       font-size: 0.8125rem;
     }
 
@@ -360,38 +410,52 @@
       color: var(--green);
     }
 
-    .journey-preview {
-      position: relative;
-      min-height: 240px;
-      margin-top: 18px;
-      overflow: hidden;
+    .project-list {
+      display: grid;
+      gap: 10px;
+      max-width: 680px;
+    }
+
+    .project-item {
+      display: grid;
+      grid-template-columns: 130px 1fr auto;
+      align-items: center;
+      gap: 16px;
       border: 1px solid var(--border);
-      border-radius: 14px;
-      background:
-        linear-gradient(135deg, rgba(63, 185, 80, 0.12), transparent 40%),
-        repeating-linear-gradient(0deg, rgba(139, 148, 158, 0.06), rgba(139, 148, 158, 0.06) 1px, transparent 1px, transparent 18px),
-        var(--surface-2);
+      border-radius: 12px;
+      padding: 14px 16px;
+      background: var(--item-bg);
+      transition: border-color 0.2s;
     }
 
-    .journey-preview iframe {
-      width: 100%;
-      height: 260px;
-      border: 0;
-      background: var(--surface-2);
+    .project-item:hover {
+      border-color: var(--green);
+      color: var(--text);
     }
 
-    .iframe-fallback {
-      display: none;
-      position: absolute;
-      inset: 0;
-      padding: 20px;
-      align-content: center;
-      text-align: left;
-      background: var(--surface-2);
+    .project-item strong {
+      color: var(--text);
+      font-size: 0.92rem;
     }
 
-    .journey-preview.is-fallback iframe { display: none; }
-    .journey-preview.is-fallback .iframe-fallback { display: grid; }
+    .project-item span {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .project-link {
+      color: var(--green);
+      font-size: 0.8rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 640px) {
+      .project-item {
+        grid-template-columns: 1fr;
+        gap: 6px;
+      }
+      .project-link { display: none; }
+    }
 
     .disclosure {
       margin-top: 14px;
@@ -411,24 +475,24 @@
     .case-card {
       border: 1px solid var(--border);
       border-radius: 16px;
-      background: rgba(22, 27, 34, 0.72);
+      background: var(--case-bg);
       padding: 18px;
       min-height: 220px;
       transition: border-color 0.2s, background 0.2s;
     }
     .case-card:hover {
       border-color: var(--green);
-      background: rgba(35, 134, 54, 0.06);
+      background: var(--case-hover);
     }
 
     .case-card.featured {
       border-color: var(--green);
-      background: linear-gradient(135deg, rgba(35, 134, 54, 0.08), rgba(22, 27, 34, 0.72));
-      box-shadow: 0 0 24px rgba(35, 134, 54, 0.08);
+      background: var(--featured-bg);
+      box-shadow: var(--featured-shadow);
     }
     .case-card.featured:hover {
       border-color: var(--green-2);
-      box-shadow: 0 0 32px rgba(35, 134, 54, 0.15);
+      box-shadow: var(--featured-hover-shadow);
     }
 
     .case-card h3 {
@@ -453,7 +517,7 @@
     .tag-featured {
       border-color: var(--green);
       color: var(--green);
-      background: rgba(35, 134, 54, 0.1);
+      background: var(--tag-bg);
     }
 
     footer {
@@ -475,7 +539,7 @@
       grid-template-rows: auto minmax(180px, 1fr) auto auto;
       border: 1px solid rgba(63, 185, 80, 0.42);
       border-radius: 18px;
-      background: rgba(1, 4, 9, 0.96);
+      background: var(--terminal-bg);
       box-shadow: 0 28px 100px var(--shadow);
       overflow: hidden;
       transition: transform 180ms ease;
@@ -526,7 +590,7 @@
       gap: 8px;
       padding: 10px 12px;
       border-top: 1px solid var(--border);
-      background: rgba(13, 17, 23, 0.96);
+      background: var(--terminal-surface);
     }
 
     .prompt { color: var(--green); flex: 0 0 auto; }
@@ -546,8 +610,8 @@
       flex-wrap: wrap;
       gap: 7px;
       padding: 10px 12px 12px;
-      border-top: 1px solid rgba(48, 54, 61, 0.65);
-      background: rgba(13, 17, 23, 0.96);
+      border-top: 1px solid var(--chip-border);
+      background: var(--terminal-surface);
     }
 
     .chip {
@@ -600,10 +664,12 @@
       <a class="brand" href="#profile" aria-label="Ikalus1988 home"><span class="brand-mark">&gt;_</span><span>Ikalus1988</span></a>
       <nav aria-label="Primary navigation">
         <a href="#profile">Profile</a>
-        <a href="#artifacts">Artifacts</a>
-        <a href="#cases">Case Studies</a>
-        <a href="#field-notes">Field Notes</a>
+        <a href="#projects">Projects</a>
+        <a href="#artifacts">Proof</a>
+        <a href="#cases">Notes</a>
+        <a href="https://github.com/Ikalus1988" target="_blank" rel="noreferrer">Contact</a>
         <button class="terminal-toggle" type="button" data-open-terminal>Terminal</button>
+        <button class="terminal-toggle" type="button" id="theme-toggle" aria-label="Toggle light/dark mode">◐</button>
       </nav>
     </header>
 
@@ -645,14 +711,14 @@
                  ##      :                        
                   .                               </pre>
           <div>
-            <p class="kicker">Auditable Knowledge Systems Builder</p>
+            <p class="kicker">AI Agent Infrastructure</p>
             <h1 id="profile-title">Ikalus1988</h1>
-            <p class="identity">small systems · hard evidence · long-running knowledge</p>
+            <p class="identity">I build auditable knowledge systems for AI agents.</p>
           </div>
         </div>
-        <p class="claim">I build small, auditable, long-running knowledge systems for swarm intelligence, industrial RAG, decentralized knowledge, and automation-resistant engineering.</p>
-        <p class="claim-cn">我构建小型、可审计、可长期运行的知识系统，关注群体智能、工业 RAG、去中心化知识库与抗自动化污染的工程实践。</p>
-        <details class="pollution" open>
+        <p class="claim">MisakaNet turns real engineering failures into searchable lessons for Cursor, Claude, Codex, and other coding agents. Also building fatal-guard for Node.js crash capture and industrial RAG for FANUC robot manuals.</p>
+        <p class="claim-cn">MisakaNet 将真实的工程失败经验转化为 Cursor、Claude、Codex 等编程 Agent 可搜索的课程。同时构建 fatal-guard（Node.js 崩溃捕获）和工业 RAG（FANUC 机器人手册检索）。</p>
+        <details class="pollution">
           <summary>automation pollution / 抗自动化污染</summary>
           <p>Automation pollution refers to the progressive degradation of knowledge quality when automated systems (bots, scrapers, LLM-generated content) write back into a knowledge base without human audit.</p>
           <p>当机器人、爬虫、LLM 生成内容等自动化系统未经人工审计就回写知识库时，知识质量会逐步退化；相关工程实践的目标就是阻止这种退化进入长期知识资产。</p>
@@ -660,46 +726,63 @@
         <div class="links" aria-label="Core links">
           <a href="https://github.com/Ikalus1988" target="_blank" rel="noreferrer"><span class="url">github.com/Ikalus1988</span><span class="mobile-label">GitHub</span></a>
           <a href="https://misakanet.org" target="_blank" rel="noreferrer"><span class="url">misakanet.org</span><span class="mobile-label">MisakaNet</span></a>
-          <a href="mailto:bot@misakanet.org"><span class="url">bot@misakanet.org</span><span class="mobile-label">Email planned</span></a>
+        </div>
+      </section>
+
+      <section id="projects" aria-labelledby="projects-title">
+        <div class="section-head">
+          <div>
+            <p class="section-label">02 / Projects</p>
+            <h2 id="projects-title">Things I build</h2>
+          </div>
+        </div>
+        <div class="project-list">
+          <a href="https://misakanet.org" target="_blank" rel="noreferrer" class="project-item">
+            <strong>MisakaNet</strong>
+            <span>Failure-memory MCP server for AI coding agents. 244 indexed lessons.</span>
+            <span class="project-link">misakanet.org →</span>
+          </a>
+          <a href="https://github.com/Ikalus1988/MisakaNet/tree/main/packages/fatal-guard" target="_blank" rel="noreferrer" class="project-item">
+            <strong>fatal-guard</strong>
+            <span>Non-invasive crash capture for Node.js. Zero dependencies.</span>
+            <span class="project-link">npm →</span>
+          </a>
+          <a href="https://github.com/Ikalus1988/self-grow-wiki" target="_blank" rel="noreferrer" class="project-item">
+            <strong>Industrial RAG</strong>
+            <span>Hybrid retrieval for FANUC robot manuals. 190+ PDFs, 230k+ chunks.</span>
+            <span class="project-link">GitHub →</span>
+          </a>
         </div>
       </section>
 
       <section id="artifacts" aria-labelledby="artifacts-title">
         <div class="section-head">
           <div>
-            <p class="section-label">02 / Artifacts</p>
+            <p class="section-label">03 / Artifacts</p>
             <h2 id="artifacts-title">Projects are the resume.</h2>
           </div>
           <span class="muted">Snapshot-only, commit-fingerprinted.</span>
         </div>
 
         <div class="artifact-grid">
-          <article class="card primary" data-snapshot-date="2026-06-13">
+          <article class="card primary" data-snapshot-date="2026-07-29">
             <h3><span class="green">MisakaNet</span> · Decentralized Swarm Knowledge Base</h3>
             <p>Primary artifact and narrative center: a Git-backed swarm knowledge system for verified lessons, autonomous nodes, audit loops, and public construction.</p>
             <div class="metrics" aria-label="MisakaNet metrics">
               <div class="metric"><strong>Active Sandbox</strong><span>Status</span></div>
-              <div class="metric"><strong>282</strong><span>GitHub Stars</span></div>
-              <div class="metric"><strong>235+</strong><span>Verified Lessons</span></div>
+              <div class="metric"><strong>300+</strong><span>GitHub Stars</span></div>
+              <div class="metric"><strong>244</strong><span>Indexed Lessons</span></div>
               <div class="metric"><strong>Git-backed</strong><span>Knowledge State</span></div>
             </div>
-            <p class="snapshot">Snapshot updated: 2026-07-16 (commit: fb830fc)</p>
+            <p class="snapshot">Snapshot updated: 2026-07-29</p>
             <p class="stale-warning" data-stale-warning></p>
             <div class="actions">
               <a class="button" href="https://misakanet.org" target="_blank" rel="noreferrer">Open MisakaNet</a>
               <a class="button" href="https://misakanet.org/journey/" target="_blank" rel="noreferrer">Open Journey</a>
             </div>
-            <div class="journey-preview" data-iframe-preview>
-              <iframe src="https://misakanet.org/journey/" title="MisakaNet journey preview" loading="lazy"></iframe>
-              <div class="iframe-fallback">
-                <p class="green">Journey preview fallback</p>
-                <p class="muted">The embedded preview did not load quickly or may be blocked by frame policy. The project remains available through the direct journey link.</p>
-                <a class="button" href="https://misakanet.org/journey/" target="_blank" rel="noreferrer">Open fallback link</a>
-              </div>
-            </div>
           </article>
 
-          <article class="card" data-snapshot-date="2026-06-13">
+          <article class="card" data-snapshot-date="2026-07-29">
             <h3><span class="blue">Industrial RAG Knowledge Base</span></h3>
             <p>Feishu-native RAG system for FANUC robot manuals, built around hybrid retrieval, entity indexes, RRF fusion, brand-pollution filtering, and a four-layer quality loop.</p>
             <div class="metrics" aria-label="Industrial RAG metrics">
@@ -713,20 +796,12 @@
               <div>Data Status: <span class="warning">Proprietary data scrubbed</span></div>
               <div>Entry: Feishu Bot / Web / HTTP API</div>
             </div>
-            <p class="snapshot">Snapshot updated: 2026-07-16 (commit: fb830fc)</p>
+            <p class="snapshot">Snapshot updated: 2026-07-29</p>
             <p class="stale-warning" data-stale-warning></p>
             <div class="actions">
               <a class="button" href="https://github.com/Ikalus1988/self-grow-wiki" target="_blank" rel="noreferrer">Open Archive</a>
               <a class="button" href="rag-journey/" target="_blank" rel="noreferrer">Open Journey</a>
               <button class="button" type="button" data-terminal-command="rag">Terminal: rag</button>
-            </div>
-            <div class="journey-preview" data-iframe-preview>
-              <iframe src="rag-journey/" title="RAG journey preview" loading="lazy"></iframe>
-              <div class="iframe-fallback">
-                <p class="green">Journey preview fallback</p>
-                <p class="muted">The embedded preview did not load quickly or may be blocked by frame policy. The project remains available through the direct journey link.</p>
-                <a class="button" href="rag-journey/" target="_blank" rel="noreferrer">Open fallback link</a>
-              </div>
             </div>
           </article>
         </div>
@@ -735,9 +810,10 @@
       <section id="cases" aria-labelledby="cases-title">
         <div class="section-head">
           <div>
-            <p class="section-label">03 / Case Studies</p>
+            <p class="section-label">04 / Case Studies</p>
             <h2 id="cases-title">Engineering notes, not lifestyle posts.</h2>
           </div>
+          <a href="notes/" style="color: var(--green); font-size: 0.84rem;">View all notes →</a>
         </div>
         <div class="case-grid">
           <a href="cases/check-dco-pre-commit-battle.html" style="display: contents; color: inherit;">
@@ -784,7 +860,7 @@
       <section id="field-notes" aria-labelledby="field-notes-title">
         <div class="section-head">
           <div>
-            <p class="section-label">04 / Field Notes</p>
+            <p class="section-label">05 / Field Notes</p>
             <h2 id="field-notes-title">Moments where knowledge became auditable.</h2>
           </div>
         </div>
@@ -824,7 +900,7 @@
     </main>
 
     <footer>
-      <p>Machine surfaces: <a href="manifest.json">manifest.json</a> · <a href="llms.txt">llms.txt</a></p>
+      <p>Machine surfaces: <a href="manifest.json">manifest.json</a> · <a href="llms.txt">llms.txt</a> · <a href="notes/">Notes</a> · <a href="now/">Now</a></p>
       <p>Zero-Dep static page. No framework, no build step, no backend.</p>
     </footer>
   </div>
@@ -860,16 +936,15 @@
     const data = {
       contact: [
         'GitHub:    https://github.com/Ikalus1988',
-        'MisakaNet: https://misakanet.org',
-        'Email:     bot@misakanet.org (planned; verify MX before public launch)'
+        'MisakaNet: https://misakanet.org'
       ],
       misaka: [
         'Project: MisakaNet',
         'Type: Decentralized Swarm Knowledge Base',
         'Status: Active Sandbox',
-        'Nodes: 282 GitHub Stars',
-        'Lessons: 235+ Verified Lessons',
-        'Snapshot: 2026-06-13 (commit: a99fbd6)',
+        'Stars: 300+ GitHub Stars',
+        'Lessons: 244 Indexed Lessons',
+        'Snapshot: 2026-07-29',
         'Link: https://misakanet.org',
         'Journey: https://misakanet.org/journey/'
       ],
@@ -927,7 +1002,7 @@
         Shell: Vanilla JS Pseudo-Terminal
         Engine: Zero-Dep Core Engine v1.0
         Uptime: Active / Anti-Rot Checked
-        Core Identity: Auditable Knowledge Systems Builder
+        Core Identity: AI Agent Infrastructure Builder
         Primary Stack: Python / Web Stdlib / Git
         Primary Artifact: MisakaNet
         Secondary Artifact: Industrial RAG Knowledge Base
@@ -953,10 +1028,13 @@
       },
       about() {
         return [
-          'Ikalus1988 — Auditable Knowledge Systems Builder',
-          'I build small, auditable, long-running knowledge systems for swarm intelligence, industrial RAG, decentralized knowledge, and automation-resistant engineering.',
+          'Ikalus1988 — AI Agent Infrastructure Builder',
+          'I build auditable knowledge systems for AI agents.',
           '',
-          'Automation pollution: quality degradation when automated systems write back into knowledge bases without human audit.'
+          'MisakaNet turns real engineering failures into searchable lessons',
+          'for Cursor, Claude, Codex, and other coding agents.',
+          '',
+          'Also: fatal-guard (Node.js crash capture), Industrial RAG (FANUC manuals).'
         ].join('\n');
       },
       misaka() { return data.misaka.join('\n'); },
@@ -1073,13 +1151,6 @@
       if (event.key === 'Escape' && terminal.classList.contains('is-open')) closeTerminal();
     });
 
-    document.querySelectorAll('[data-iframe-preview]').forEach((preview) => {
-      const timer = setTimeout(() => preview.classList.add('is-fallback'), 2500);
-      const iframe = preview.querySelector('iframe');
-      iframe.addEventListener('load', () => clearTimeout(timer), { once: true });
-      iframe.addEventListener('error', () => preview.classList.add('is-fallback'), { once: true });
-    });
-
     function updateSnapshotWarnings() {
       const now = new Date();
       document.querySelectorAll('[data-snapshot-date]').forEach((card) => {
@@ -1094,6 +1165,27 @@
     }
 
     updateSnapshotWarnings();
+
+    // Theme toggle
+    const themeToggle = document.getElementById('theme-toggle');
+    const root = document.documentElement;
+
+    function applyTheme(theme) {
+      root.setAttribute('data-theme', theme);
+      themeToggle.textContent = theme === 'dark' ? '◐' : '◑';
+      themeToggle.setAttribute('aria-label', theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+      document.querySelector('meta[name="theme-color"]').content = theme === 'dark' ? '#0d1117' : '#f6f8fa';
+    }
+
+    const saved = localStorage.getItem('theme');
+    const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    applyTheme(saved || (prefersLight ? 'light' : 'dark'));
+
+    themeToggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(next);
+      localStorage.setItem('theme', next);
+    });
   </script>
 </body>
 </html>

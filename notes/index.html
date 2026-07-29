@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ikalus1988 — Engineering notes, case studies, and field observations.">
+  <meta name="theme-color" content="#0d1117">
+  <title>Ikalus1988 · Notes</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --green: #3fb950;
+      --green-2: #238636;
+      --blue: #58a6ff;
+      --warning: #d29922;
+      --cyan: #39d0d8;
+      --red: #f85149;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+      background: var(--bg);
+    }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { color: var(--green); }
+
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 24px 0 72px;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 0;
+      backdrop-filter: blur(16px);
+      background: rgba(13, 17, 23, 0.78);
+      border-bottom: 1px solid rgba(48, 54, 61, 0.5);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .brand-mark { color: var(--green); }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      letter-spacing: -0.05em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin: 0 0 40px;
+    }
+
+    section {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      color: var(--green);
+      font-size: 0.8125rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin: 0 0 8px;
+    }
+
+    h2 {
+      margin: 0 0 24px;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      letter-spacing: -0.05em;
+    }
+
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .case-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(22, 27, 34, 0.72);
+      padding: 18px;
+      min-height: 220px;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .case-card:hover {
+      border-color: var(--green);
+      background: rgba(35, 134, 54, 0.06);
+    }
+
+    .case-card.featured {
+      border-color: var(--green);
+      background: linear-gradient(135deg, rgba(35, 134, 54, 0.08), rgba(22, 27, 34, 0.72));
+      box-shadow: 0 0 24px rgba(35, 134, 54, 0.08);
+    }
+
+    .case-card h3 {
+      margin: 0;
+      font-size: 0.98rem;
+    }
+
+    .case-card p {
+      color: var(--muted);
+      font-size: 0.84rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--muted);
+      padding: 3px 8px;
+      font-size: 0.72rem;
+    }
+
+    .tag-featured {
+      border-color: var(--green);
+      color: var(--green);
+      background: rgba(35, 134, 54, 0.1);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      margin-bottom: 24px;
+    }
+
+    .back-link:hover { color: var(--green); }
+
+    footer {
+      padding: 44px 0 18px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.8125rem;
+    }
+
+    @media (max-width: 860px) {
+      .case-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .page { width: min(100% - 28px, 1120px); padding-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <a class="brand" href="../" aria-label="Back to homepage"><span class="brand-mark">&lt;</span><span>Back</span></a>
+    </header>
+
+    <main>
+      <a href="../" class="back-link">← Back to homepage</a>
+      <h1>Notes</h1>
+      <p class="subtitle">Engineering notes, case studies, and field observations.</p>
+
+      <section id="cases">
+        <p class="section-label">Case Studies</p>
+        <h2>Engineering notes, not lifestyle posts.</h2>
+        <div class="case-grid">
+          <a href="../cases/check-dco-pre-commit-battle.html" style="display: contents; color: inherit;">
+          <article class="case-card featured">
+            <span class="tag tag-featured">✦ Featured</span>
+            <h3 style="color: var(--green);">The 43-Line Python Hook That Beat pre-commit's Core Team</h3>
+            <p>How we rejected pygrep, built a standalone check-dco in 43 lines, survived upstream rejection, and achieved full supply chain autonomy.</p>
+          </article>
+          </a>
+          <a href="../cases/openclaw-error-handler-pr-battle.html" style="display: contents; color: inherit;">
+          <article class="case-card featured">
+            <span class="tag tag-featured">✦ Featured</span>
+            <h3 style="color: var(--blue);">The 30-Line Hook That Got Gold Shrimp</h3>
+            <p>How we shipped a fatal-error hook to OpenClaw through 3 architecture audits, shell injection fixes, secret isolation, and ClawSweeper's gold shrimp rating — without ever building the runtime.</p>
+          </article>
+          </a>
+          <article class="case-card">
+            <span class="tag">Available</span>
+            <h3>MisakaNet: Git as a Distributed Knowledge State Machine</h3>
+            <p>How Git commits, lessons, nodes, and audit loops turn public construction into a durable decentralized knowledge state.</p>
+          </article>
+          <a href="../rag-journey/" style="display: contents; color: inherit;">
+          <article class="case-card">
+            <span class="tag tag-featured">✦ Available</span>
+            <h3 style="color: var(--blue);">Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base</h3>
+            <p>How 190+ FANUC PDFs became a Feishu-native RAG loop with hybrid retrieval, entity search, and bad-case learning.</p>
+          </article>
+          </a>
+          <a href="https://github.com/Ikalus1988/MisakaNet/tree/main/packages/fatal-guard" style="display: contents; color: inherit;">
+          <article class="case-card">
+            <span class="tag tag-featured">✦ v0.2.0</span>
+            <h3 style="color: var(--warning);">@misaka-net/fatal-guard: Non-Invasive Fatal Error Interceptor</h3>
+            <p>Zero-dependency Node.js runtime guard — capture crashes via wrapper mode (<code>fatal-guard -- &lt;cmd&gt;</code>) or preload (<code>node -r</code>), route 4-field payload to any external handler.</p>
+          </article>
+          </a>
+          <article class="case-card">
+            <span class="tag">Draft / Coming in Q3</span>
+            <h3>Audit Loops Against Low-Quality Automation</h3>
+            <p>The shared pattern behind MisakaNet and Industrial RAG: resist pollution, preserve evidence, and keep knowledge auditable.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="field-notes">
+        <p class="section-label">Field Notes</p>
+        <h2>Moments where knowledge became auditable.</h2>
+        <div class="case-grid">
+          <article class="case-card featured">
+            <span class="tag tag-featured">✦ Featured</span>
+            <h3 style="color: var(--cyan);">From a Colleague's Claude Memory Dump to a Reusable FANUC Lesson</h3>
+            <p>A colleague didn't know what a "skill" was. They just dumped all of Claude's memory. From that chaos, we distilled kcantrans VR-variable access — a fix that was already working before it became a lesson. <em>MisakaNet turns messy agent memory dumps into reusable failure lessons.</em></p>
+          </article>
+          <article class="case-card featured">
+            <span class="tag tag-featured">✦ Featured</span>
+            <h3 style="color: var(--red);">6,074 Clones, Zero Proof of Use</h3>
+            <p>14 days: 6,074 clones, 738 unique cloners. Helpful votes: zero. The API worked. Nobody clicked. This revealed that GitHub traffic ≠ lesson consumption — and launched the Usefulness Proof Sprint.</p>
+          </article>
+          <article class="case-card">
+            <span class="tag">Insight</span>
+            <h3>Lesson Is Not Skill</h3>
+            <p>Skills teach agents how to do things. Lessons teach agents what went wrong before and how not to fail again. MisakaNet is not another skill marketplace — it is a shared failure-memory layer.</p>
+          </article>
+          <article class="case-card">
+            <span class="tag">Insight</span>
+            <h3>Bounty Contributors Are Not Always Users</h3>
+            <p>7 contributors reached. Most came via bounty labels. Post-PR interaction: zero. This shifted strategy from "chase PR counts" to "chase usefulness proof."</p>
+          </article>
+          <article class="case-card">
+            <span class="tag">Experiment</span>
+            <h3>When Lessons Are Too Heavy: Rescue Cards</h3>
+            <p>Non-technical users don't need lessons. They need 3-step rescue cards: "Move file to desktop. Use 7-Zip. Re-download." Screenshot + one sentence → structured knowledge.</p>
+          </article>
+          <article class="case-card">
+            <span class="tag">v2.12.0</span>
+            <h3>Testing Failure Memory as an MCP Server</h3>
+            <p>glama.json ownership. awesome-mcp-servers PR #10044. 16 Glama Chat QA queries covering DCO, pip, GitHub API, secret scan, agent setup, and negative tests.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p><a href="../">← Back to homepage</a></p>
+    </footer>
+  </div>
+</body>
+</html>
