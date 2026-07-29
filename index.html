@@ -716,8 +716,8 @@
             <p class="identity">I build auditable knowledge systems for AI agents.</p>
           </div>
         </div>
-        <p class="claim">MisakaNet turns real engineering failures into searchable lessons for Cursor, Claude, Codex, and other coding agents. Also building fatal-guard for Node.js crash capture and industrial RAG for FANUC robot manuals.</p>
-        <p class="claim-cn">MisakaNet 将真实的工程失败经验转化为 Cursor、Claude、Codex 等编程 Agent 可搜索的课程。同时构建 fatal-guard（Node.js 崩溃捕获）和工业 RAG（FANUC 机器人手册检索）。</p>
+        <p class="claim">MisakaNet turns real engineering failures into searchable lessons for Cursor, Claude, Codex, and other coding agents. One agent's failure shouldn't be another agent's lesson.</p>
+        <p class="claim-cn">一个 Agent 踩过的坑，不该让其他 Agent 再踩一次。MisakaNet 将真实工程失败经验转化为编程 Agent 可搜索的课程。</p>
         <details class="pollution">
           <summary>automation pollution / 抗自动化污染</summary>
           <p>Automation pollution refers to the progressive degradation of knowledge quality when automated systems (bots, scrapers, LLM-generated content) write back into a knowledge base without human audit.</p>
@@ -1029,12 +1029,13 @@
       about() {
         return [
           'Ikalus1988 — AI Agent Infrastructure Builder',
-          'I build auditable knowledge systems for AI agents.',
           '',
-          'MisakaNet turns real engineering failures into searchable lessons',
-          'for Cursor, Claude, Codex, and other coding agents.',
+          'One agent\'s failure shouldn\'t be another agent\'s lesson.',
+          '一个 Agent 踩过的坑，不该让其他 Agent 再踩一次。',
           '',
-          'Also: fatal-guard (Node.js crash capture), Industrial RAG (FANUC manuals).'
+          'MisakaNet: failure-memory MCP server for coding agents.',
+          'fatal-guard: non-invasive crash capture for Node.js.',
+          'Industrial RAG: hybrid retrieval for FANUC robot manuals.'
         ].join('\n');
       },
       misaka() { return data.misaka.join('\n'); },
