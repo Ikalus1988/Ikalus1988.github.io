@@ -14,8 +14,8 @@ MisakaNet is a decentralized swarm knowledge base focused on autonomous nodes, v
 
 - Site: https://misakanet.org
 - Journey: https://misakanet.org/journey/
-- Snapshot: 2026-07-29
-- Metrics: 235+ registered nodes, 244 indexed lessons, active sandbox
+- Snapshot: 2026-09-16
+- Metrics: 232 registered nodes, 393 indexed lessons across 43 domains, 7 remote MCP tools, one-command setup for 5 agents
 
 ## Secondary Project
 
@@ -31,6 +31,7 @@ Industrial RAG Knowledge Base is a Feishu-native RAG system for FANUC industrial
 1. MisakaNet: Git as a Distributed Knowledge State Machine — available.
 2. Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base — draft / coming in Q3.
 3. Audit Loops Against Low-Quality Automation — draft / coming in Q3.
+4. Five Failures That Passed Every Check — available at /cases/five-failures-that-passed-every-check.html (green checks hiding a 404 source, a CJK-dropping tokenizer, a 112-commit drift, and SSRF holes in our own gate).
 
 ## Machine-Readable Index
 

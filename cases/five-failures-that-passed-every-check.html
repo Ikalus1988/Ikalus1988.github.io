@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Five Failures That Passed Every Check — a field log of four green pull requests citing a repository that does not exist, a tokenizer that ate a language, a red check that was right, a clone 112 commits behind reality, and holes in our own new gate.">
+  <meta name="theme-color" content="#0d1117">
+  <title>Five Failures That Passed Every Check · Ikalus1988</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --green: #3fb950; --green-2: #238636; --blue: #58a6ff; --warning: #d29922; --danger: #f85149; --shadow: rgba(1,4,9,0.78); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body { margin: 0; color: var(--text); background: var(--bg); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; line-height: 1.7; }
+    a { color: var(--blue); }
+    a:hover { color: var(--green); }
+    .page { width: min(760px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 96px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; line-height: 1.3; }
+    h2 { font-size: 1.15rem; margin: 32px 0 12px; color: var(--green); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1rem; margin: 24px 0 8px; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    .meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 32px; }
+    .back { color: var(--muted); font-size: 0.82rem; margin-bottom: 32px; display: inline-block; }
+    .back:hover { color: var(--green); }
+    code { background: rgba(48,54,61,0.4); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; margin: 16px 0; }
+    pre code { background: none; padding: 0; border-radius: 0; }
+    blockquote { border-left: 3px solid var(--green); margin: 16px 0; padding: 8px 16px; background: rgba(35,134,54,0.04); border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+    blockquote p { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+    th { background: var(--surface); color: var(--text); }
+    .badge { display: inline-block; border: 1px solid var(--green); color: var(--green); background: rgba(35,134,54,0.1); border-radius: 999px; padding: 3px 10px; font-size: 0.72rem; margin-bottom: 16px; }
+    .verdict { background: linear-gradient(135deg, rgba(35,134,54,0.08), transparent); border: 1px solid var(--green); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .timeline { list-style: none; padding: 0; }
+    .timeline li { padding: 4px 0 4px 20px; border-left: 2px solid var(--border); margin-left: 6px; position: relative; font-size: 0.88rem; }
+    .timeline li::before { content: '◆'; position: absolute; left: -10px; color: var(--green); font-size: 0.7rem; top: 6px; }
+    .timeline li.fail::before { color: var(--danger); }
+    .timeline li.done::before { color: var(--green); }
+    .timeline li span { color: var(--muted); font-size: 0.78rem; }
+    @media (max-width: 600px) { .page { padding: 24px 0 64px; } h1 { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <a href="/" class="back">← back to hub</a>
+  <span class="badge">✦ Case Study · Engineering</span>
+  <h1>Five Failures That Passed Every Check</h1>
+  <p class="meta">2026-09-16 · 9 min read · <a href="https://github.com/Ikalus1988/MisakaNet">MisakaNet</a> · <a href="https://github.com/Ikalus1988/MisakaNet/issues/1775">issue #1775</a></p>
+
+  <blockquote>
+    <p>Every one of these five was green. The checks said pass. The system was broken anyway. This is the log of finding them, and of the machinery that now finds them instead of me.</p>
+  </blockquote>
+
+  <p>MisakaNet's whole claim is that a lesson is worth more when you can <em>verify</em> it — provenance, evidence level, reuse evidence, a public trail. So the useful thing to write down is not the feature list. It is the week where the verification itself turned out to be hollow, five times, in five different ways.</p>
+
+  <h2>1. Twenty-four green checks, and a repository that does not exist</h2>
+  <p>Four lesson pull requests — <a href="https://github.com/Ikalus1988/MisakaNet/pull/1713">#1713</a>, #1714, #1715, #1716 — passed <strong>24 of 24 checks</strong>. Structural gate, DCO, injection scan, CodeQL, a nine-cell test matrix: green, green, green.</p>
+  <p>Each one cited its source as:</p>
+  <pre><code>https://github.com/modelcontextprotocol/mcp-memory-service/issues/1652</code></pre>
+  <pre><code>GET /repos/modelcontextprotocol/mcp-memory-service              → HTTP 404
+GET /repos/modelcontextprotocol/mcp-memory-service/issues/1652  → HTTP 404</code></pre>
+  <p>The repository does not exist. The four files also carried <code>evidence_level: E3</code> — the highest grade the corpus awards — and <code>provenance.issue: 1652</code>, which is <em>our own bounty number</em> dressed up as an upstream citation. Every gate we had checked <em>structure</em> (required fields, length, duplicate titles, domain vocabulary), <em>signatures</em> (DCO) and <em>injection shapes</em>. None of them could check whether a link resolves.</p>
+  <p>In a corpus whose value proposition is verifiable failure memory, an invented source is worse than no source: it looks checkable and is not.</p>
+
+  <h2>2. The corpus answered a Chinese question with silence</h2>
+  <p>The user this project is aimed at — someone who does not know AI tooling and writes in Chinese — typed a plain question and got nothing. Not a bad answer. Zero results.</p>
+  <p>The cause was not ranking, or vocabulary, or the corpus. It was one tokenizer. <code>bm25Tokenize()</code> in the search worker dropped CJK characters entirely, so a Chinese query produced <strong>zero query terms</strong> and the search returned before it scored anything. Measured over twenty Chinese natural-language queries with known answers: <strong>11 of 20 produced no query terms at all</strong>. The index was never asked.</p>
+  <p>The fix came in two parts worth keeping apart. First, a hand-built alias table — 150 entries, six kinds, and the rule that <em>every entry must be evidenced inside this repository</em>, with a file and a quote, so a reviewer can re-run the grep it was built from. Second, a measurement: top-1 went from <strong>40% to 70%</strong> on the local engine and <strong>45% to 75%</strong> on plain BM25, with zero regressions, and zero-query-term queries went from 11/20 to 0/20. The number that mattered most was the first one, though: nobody had ever measured the silence.</p>
+
+  <h2>3. The red check that was telling the truth</h2>
+  <p>A pull request was red. The check said <em>"Test suite failed"</em>. The test job was green. Every visible signal said the failure was noise.</p>
+  <p>It was not noise. The job ran pytest with <code>continue-on-error</code>, so the step reported <code>success</code> while <code>steps.pytest.outcome</code> — the value the report was built from — said <code>failure</code>. The check was red because tests really were failing, and the UI was hiding which ones. Reading the raw job log instead of the check summary produced this:</p>
+  <pre><code>FAILED tests/test_query_aliases.py::test_aliases_are_grounded_in_the_repository
+============ 1 failed, 1336 passed, 17 skipped in 71.11s =============</code></pre>
+  <p>That test had passed on the machine that wrote it — because the evidence it pointed at was</p>
+  <pre><code>.nodes/staging/node2/bootstrap-rag-chinese-encoding-pymupdf4llm.md</code></pre>
+  <p>A gitignored scratch directory. It existed in exactly one working tree on earth. The assertion was <code>Path(ev["file"]).is_file()</code>, which is true there and false in a clean checkout.</p>
+  <p>The fix was two lines: point the evidence at a tracked file, and change the assertion to <code>git ls-files --error-unmatch</code> — so "the file happens to exist on your machine" stops counting as evidence. Verified in both directions, because a guard nobody has seen fail is not a guard: with the old path restored, the test fails again on purpose.</p>
+
+  <h2>4. The clone that was 112 commits behind reality</h2>
+  <p>A question about whether the local repository was ahead or behind turned into an answer nobody expected: it was <strong>112 commits behind</strong>, with <strong>zero</strong> commits of its own.</p>
+  <p>The reason was a quiet, months-long failure. <code>github.com:443</code> is unreachable from this machine — not DNS, not a proxy: seven official IPs tested, all dead — while <code>api.github.com</code> answers in 0.7s. So every push for weeks had gone through the REST API instead of <code>git push</code>. Pull requests merged. Main advanced. The clone stayed frozen at 2026-09-15 and nobody noticed, because nothing depended on it.</p>
+  <p>Once fetched properly, two orphaned pull requests appeared: work from September 13 that had never reached main — a workflow checker and a lesson — while the local tree had been carrying "uncommitted changes" that were really just history it had never caught up on.</p>
+  <p>The repair: <code>ssh.github.com:443</code> was reachable, so a repository-scoped deploy key (write, one repo, revocable with one API call) restored a native path. The first real <code>git push</code> this repository had ever seen carried a branch that a human then merged. The lesson generalizes past GitHub: <em>if your tooling silently takes a different path, the state on disk drifts from the state that matters, and every local measurement becomes a lie.</em></p>
+
+  <h2>5. Our own gate had holes — found by pointing a reviewer at it</h2>
+  <p>Having built the provenance gate that morning, I ran Alibaba's <a href="https://github.com/alibaba/open-code-review">open-code-review</a> over the codebase. Its 41 findings included three in code written hours earlier:</p>
+  <ul>
+    <li><strong>SSRF.</strong> The exemption list covered only RFC1918, so a pull request could cite <code>http://169.254.169.254/latest/meta-data/</code> — the cloud metadata endpoint — or a CGNAT address, or any IPv6 literal, and <strong>CI would fetch it</strong>.</li>
+    <li><strong>Credential leak.</strong> <code>GITHUB_TOKEN</code> was attached to <em>every</em> fetch, so any URL in any lesson's frontmatter received the workflow token.</li>
+    <li><strong>Open redirect.</strong> <code>urlopen</code> followed 3xx by default, so a public URL could bounce the runner at a metadata address, token included.</li>
+  </ul>
+  <p>It also found three ways to hide a source from the gate (a URL inside a metadata list counted as a citation; a block scalar was dropped entirely; a single-line JSON frontmatter had no line to key off). All fixed the same evening, with tests named after the bypasses.</p>
+  <p>The honest version of this story is not "a tool found bugs". It is that the gate had been written, reviewed, unit-tested, merged — and then defeated in an hour by reading it adversarially. Most of its tests had been written by the same mind that wrote the bug.</p>
+
+  <h2>What actually changed</h2>
+  <ul>
+    <li><strong>A provenance gate in CI.</strong> Two tiers: a placeholder or a confirmed-dead link fails, and a new lesson claiming E2/E3 with no resolvable source is sent back. Deliberately conservative — a timeout, a DNS failure or a rate limit is recorded as <em>unknown</em> and never fails the build, because a gate that goes red on someone else's outage gets bypassed within a week. It now runs on all 439 lessons and 31 citations with zero exceptions, and it was red-teamed in CI itself: a probe PR passed the structural gate and failed only the provenance gate, exactly as designed.</li>
+    <li><strong>An opt-in auto-merge channel for lessons.</strong> A pull request labeled <code>auto-merge-lesson</code> that touches only <code>lessons/</code>, passes every required check and cites a resolvable source merges itself. The decision logic is a tested function, not YAML, and the job checks out the default branch rather than the PR head — a job holding <code>contents: write</code> must never execute code the pull request can rewrite.</li>
+    <li><strong>A setup installer that installs everywhere.</strong> <code>npx @misaka-net/misakanet-setup</code> now wires five agents (Claude Code, Codex, Hermes, OpenClaw, codewhale), pre-allows the read-only MCP tools so a first search is not a permission prompt, and prints a redacted report safe to paste in public.</li>
+    <li><strong>Contributors' work landed, with credit.</strong> External pull requests were merged after unblocking the real cause — one had four red checks that were pure staleness, another needed a two-line provenance fix. Their commits kept their authors.</li>
+  </ul>
+
+  <h2>The numbers, as of this post</h2>
+  <ul>
+    <li><strong>393</strong> indexed lessons (440 markdown files, including templates and translations) across <strong>43</strong> domains</li>
+    <li><strong>232</strong> registered nodes; the node is a pseudonym, not an account</li>
+    <li><strong>7</strong> MCP tools on the remote endpoint <code>https://misakanet.org/mcp</code>, no install and no account needed to read</li>
+    <li><strong>5</strong> agent targets wired by one command</li>
+    <li><strong>150</strong> query aliases, each with in-repo evidence; <strong>+30 points</strong> of top-1 accuracy on Chinese natural-language queries</li>
+    <li>Checks that now exist where none did: provenance (43 tests), lesson-PR eligibility (36), setup installer (49)</li>
+  </ul>
+
+  <h2>What is still not true</h2>
+  <p>The same week produced a list of things I cannot claim yet, and it belongs in the same post as the wins:</p>
+  <ul>
+    <li><strong>"Improves efficiency" has no number.</strong> There are cases — an agent that searched, hit a lesson and applied it — but no measurement, because the search signal only ever recorded <em>misses</em>. The denominator is being built; until it exists, "it helps" is an anecdote.</li>
+    <li><strong>Multi-agent collaboration is not what exists.</strong> What exists is one knowledge base read by several agents. There is no task layer, no handoff, no conflict detection, and the declared <code>agent_type</code>/<code>client_id</code> are self-reported — which the protocol documentation says outright rather than implying otherwise.</li>
+    <li><strong>Enterprise self-hosting is a paragraph, not a deliverable.</strong> The questions an institution asks first — what leaves the network, who can audit it, how is cost bounded — have no document yet, let alone an answer.</li>
+  </ul>
+
+  <h2>Principles that survived the week</h2>
+  <ol>
+    <li><strong>A check nobody has seen fail is not a check.</strong> Every guard added here got a red-team attempt in the same change, including the guard on the guard: the provenance gate was proven in CI by a probe that only it caught.</li>
+    <li><strong>Fail on evidence, never on its absence.</strong> Unknown is a first-class outcome. Gates that cry wolf are gates that get switched off.</li>
+    <li><strong>Evidence must be reproducible from a clean checkout.</strong> A file that exists only on the author's machine is not evidence; the assertion now says so, in git's own words.</li>
+    <li><strong>When the tooling lies, fix the tooling.</strong> Four false alarms on a check, a green board covering a 404, a tokenizer that eats a language — all of them were tools telling the truth about the wrong thing.</li>
+    <li><strong>Credit is part of the mechanism.</strong> A knowledge network that quietly absorbs contributions teaches contributors to stop making them.</li>
+  </ol>
+
+  <p style="color: var(--muted);">
+    <strong>References:</strong><br>
+    <a href="https://github.com/Ikalus1988/MisakaNet/issues/1775">issue #1775</a> — the open-code-review findings, triaged<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet/pull/1768">PR #1768</a> — the provenance gate · <a href="https://github.com/Ikalus1988/MisakaNet/pull/1773">PR #1773</a> — its security holes<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet/pull/1781">PR #1781</a> — the lesson auto-merge channel<br>
+    <a href="https://github.com/Ikalus1988/MisakaNet/blob/main/docs/maintainer/blueprint-and-strategy-review-2026-09-16.md">Blueprint &amp; strategy review</a> — where the "still not true" list comes from<br>
+    <a href="https://misakanet.org">misakanet.org</a> — the service
+  </p>
+
+  <p style="font-size: 0.82rem; color: var(--muted); margin-top: 48px;">
+    <a href="/">← back to hub</a>
+  </p>
+</div>
+</body>
+</html>
