@@ -31,6 +31,7 @@ Industrial RAG Knowledge Base is a Feishu-native RAG system for FANUC industrial
 1. MisakaNet: Git as a Distributed Knowledge State Machine — available.
 2. Industrial RAG: From Robot Manuals to Self-Evolving Knowledge Base — draft / coming in Q3.
 3. Audit Loops Against Low-Quality Automation — draft / coming in Q3.
+5. What 3,775 Commits Actually Buy — available at /cases/what-3775-commits-actually-buy.html (composition analysis: 40% machine bookkeeping, 26% feat/fix, and the four deliverables that matter to a non-technical user).
 4. Five Failures That Passed Every Check — available at /cases/five-failures-that-passed-every-check.html (green checks hiding a 404 source, a CJK-dropping tokenizer, a 112-commit drift, and SSRF holes in our own gate).
 
 ## Machine-Readable Index
