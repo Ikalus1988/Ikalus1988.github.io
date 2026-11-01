@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Ranked 13th of 2,074 GitHub MCP servers on Glama's list — and the honest reading of it: the score is quality times keyword proximity, and the loud part was the 0.60. Plus what actually moved today (TDQS 4.2 → 4.4) and the milestones behind it.">
+  <meta name="theme-color" content="#0d1117">
+  <title>Ranked 13th of 2,074 · Ikalus1988</title>
+  <style>
+    :root { color-scheme: dark; --bg: #0d1117; --surface: #161b22; --border: #30363d; --text: #c9d1d9; --muted: #8b949e; --green: #3fb950; --green-2: #238636; --blue: #58a6ff; --warning: #d29922; --danger: #f85149; --shadow: rgba(1,4,9,0.78); }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: var(--bg); }
+    body { margin: 0; color: var(--text); background: var(--bg); font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; line-height: 1.7; }
+    a { color: var(--blue); }
+    a:hover { color: var(--green); }
+    .page { width: min(760px, calc(100% - 40px)); margin: 0 auto; padding: 48px 0 96px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; line-height: 1.3; }
+    h2 { font-size: 1.15rem; margin: 32px 0 12px; color: var(--green); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
+    h3 { font-size: 1rem; margin: 24px 0 8px; }
+    p { margin: 0 0 16px; color: var(--muted); }
+    .meta { font-size: 0.82rem; color: var(--muted); margin-bottom: 32px; }
+    .back { color: var(--muted); font-size: 0.82rem; margin-bottom: 32px; display: inline-block; }
+    .back:hover { color: var(--green); }
+    code { background: rgba(48,54,61,0.4); padding: 2px 6px; border-radius: 4px; font-size: 0.88em; }
+    pre { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px; overflow-x: auto; font-size: 0.82rem; line-height: 1.5; margin: 16px 0; }
+    pre code { background: none; padding: 0; border-radius: 0; }
+    blockquote { border-left: 3px solid var(--green); margin: 16px 0; padding: 8px 16px; background: rgba(35,134,54,0.04); border-radius: 0 8px 8px 0; font-size: 0.9rem; }
+    blockquote p { margin: 4px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 0.84rem; }
+    th, td { border: 1px solid var(--border); padding: 8px 12px; text-align: left; }
+    th { background: var(--surface); color: var(--text); }
+    .badge { display: inline-block; border: 1px solid var(--green); color: var(--green); background: rgba(35,134,54,0.1); border-radius: 999px; padding: 3px 10px; font-size: 0.72rem; margin-bottom: 16px; }
+    .verdict { background: linear-gradient(135deg, rgba(35,134,54,0.08), transparent); border: 1px solid var(--green); border-radius: 12px; padding: 20px; margin: 24px 0; }
+    .timeline { list-style: none; padding: 0; }
+    .timeline li { padding: 4px 0 4px 20px; border-left: 2px solid var(--border); margin-left: 6px; position: relative; font-size: 0.88rem; }
+    .timeline li::before { content: '◆'; position: absolute; left: -10px; color: var(--green); font-size: 0.7rem; top: 6px; }
+    .timeline li.fail::before { color: var(--danger); }
+    .timeline li.done::before { color: var(--green); }
+    .timeline li span { color: var(--muted); font-size: 0.78rem; }
+    @media (max-width: 600px) { .page { padding: 24px 0 64px; } h1 { font-size: 1.25rem; } }
+  </style>
+</head>
+<body>
+<div class="page">
+  <a href="/" class="back">← back to hub</a>
+  <span class="badge">✦ Field Note · External Measurement</span>
+  <h1>Ranked 13th of 2,074</h1>
+  <p class="meta">2026-11-01 · 6 min read · <a href="https://github.com/Ikalus1988/MisakaNet">MisakaNet</a> · <a href="https://glama.ai/mcp/best/github">the list</a></p>
+
+  <blockquote>
+    <p>Getting listed is not the interesting part. The interesting part is that a third party publishes its arithmetic, and the arithmetic says our quality is fine and our <em>wording</em> is what costs us six places.</p>
+  </blockquote>
+
+  <p>Glama's <a href="https://glama.ai/mcp/best/github">20 Best GitHub MCP Servers, Compared (October 2026)</a> lists MisakaNet at <strong>#13</strong>, composite <strong>51.2</strong>, 544 stars, tagged <em>Community favourite</em>. The page is stamped <em>Updated October 26, 2026</em>, is chosen from <strong>2,074</strong> GitHub servers in the Glama registry, and is rebuilt weekly.</p>
+
+  <p>That is a real third-party recommendation, and it is also a number I did not want to quote without reading how it is computed. Glama publishes the formula on the page:</p>
+
+  <pre><code>composite = weighted_mean(Adoption 40% · Maintenance 24% · Momentum 14% ·
+                           Tool quality 13% · Trust 9%)
+            × relevance × continuity × evidence</code></pre>
+
+  <h2>Our five terms, read off the page</h2>
+
+  <table>
+    <thead><tr><th>term</th><th>weight</th><th>score</th><th>what it means</th></tr></thead>
+    <tbody>
+      <tr><td>Adoption</td><td>40%</td><td>72</td><td>stars, installs, "used through Glama"</td></tr>
+      <tr><td>Maintenance</td><td>24%</td><td>100</td><td>release cadence, issue response</td></tr>
+      <tr><td>Momentum</td><td>14%</td><td>85</td><td>star velocity, recent activity</td></tr>
+      <tr><td>Tool quality</td><td>13%</td><td>88</td><td>TDQS — the tool-description audit</td></tr>
+      <tr><td>Trust</td><td>9%</td><td>100</td><td>license, provenance, transparency</td></tr>
+      <tr><td colspan="2"><strong>weighted mean</strong></td><td colspan="2"><strong>85.3</strong></td></tr>
+      <tr><td colspan="2">× relevance</td><td colspan="2"><strong>0.60</strong> (the keyword is <em>tagged</em>, not <em>declared</em>)</td></tr>
+      <tr><td colspan="2"><strong>= 51.2 → #13</strong></td><td colspan="2">an 85.3 weighted mean would sit around #9 on the same page</td></tr>
+    </tbody>
+  </table>
+
+  <div class="verdict">
+    <p><strong>The honest reading:</strong> the multiplier is doing the damage, not the quality terms. 85.3 × 0.60 = 51.2. A server whose listing copy names GitHub outright gets a higher multiplier on identical work; ours reads <em>"debugging a recurring error in a code repository"</em>, and the word GitHub appears nowhere in the description, the tags, or the categories.</p>
+  </div>
+
+  <p>I have not changed that copy. Not because it is hard — it is a two-line edit — but because a description is where a product says what it <em>is</em>, and editing it to court a third party's relevance multiplier is a positioning decision, not a bug fix. It is written down as an open item rather than quietly done.</p>
+
+  <h2>What did move today: the tool-quality term</h2>
+
+  <p>The one term I could move by doing correct work was Tool quality, and it moved for a concrete reason. The Glama listing scores the <strong>stdio</strong> server (its Docker build runs <code>python3 -m misakanet.server</code>), and that surface served <strong>11 tools with no annotations at all</strong> — no <code>readOnlyHint</code>, no <code>destructiveHint</code>, nothing that tells a client what a call does to the world. The hosted worker had carried them for weeks; the local server had carried none.</p>
+
+  <p>Today's commit puts all eleven in one table, ports the eight shared ones from the worker verbatim, and — this is the part that makes it a gate rather than a comment — adds a test that <em>parses the worker's JavaScript</em> and fails when the two surfaces disagree about the same tool.</p>
+
+  <p>The listing re-scored the same afternoon:</p>
+
+  <table>
+    <thead><tr><th></th><th>2026-10-23</th><th>2026-11-01 15:25</th></tr></thead>
+    <tbody>
+      <tr><td>TDQS</td><td>4.2 / 5.0</td><td><strong>A 4.4 / 5.0</strong></td></tr>
+      <tr><td>Behavior</td><td>—</td><td><strong>5 / 5</strong> — "annotations already declare read-only, idempotent, open-world, non-destructive"</td></tr>
+      <tr><td>Conciseness</td><td>4 / 5</td><td><strong>5 / 5</strong></td></tr>
+      <tr><td>Completeness</td><td>—</td><td><strong>5 / 5</strong></td></tr>
+      <tr><td>Disambiguation</td><td>3 / 5</td><td><strong>3 / 5</strong> — "three tools all match a" … still the one that did not move</td></tr>
+    </tbody>
+  </table>
+
+  <p>Disambiguation staying at 3 is the useful half of the result: <code>misakanet_search</code>, <code>misakanet_memory_context</code> and <code>misakanet_preflight</code> are three retrieval-shaped tools whose descriptions never say which one to use <em>instead of</em> the others. That is a writing problem with a known fix, and it is next, not this week.</p>
+
+  <h2>The milestones behind the number</h2>
+
+  <ul class="timeline">
+    <li class="done"><strong>Five releases in one day</strong> <span>v3.0.0 → v3.4.0</span><br>
+      v3.0.0 was the first major (Python ≥ 3.11 as a hard floor, and the Windows leg became a required check the same day). 3.4.0 shipped hours before this post; PyPI, npm, GHCR, the MCP Registry and the Cloudflare worker all answer <code>3.4.0</code>.</li>
+    <li class="done"><strong>Corpus: 657 → 765 lessons</strong> <span>a day</span><br>
+      108 new lessons, of which 91 came from a batch conversion and 15 from one maintenance session that turned 16 open intake issues into lessons — with a receipt posted on every one of them.</li>
+    <li class="done"><strong>The intake form learned a new word: <code>proposal</code></strong> <span>after a three-month plan had to be filed as a "lesson candidate"</span><br>
+      A plan is not a failure report. It now has its own kind across five readers, held equal by a test that parses each of them, and the classifier routes it to a decision instead of a lesson queue.</li>
+    <li class="done"><strong>Three gates added, all of the "a claim nobody checks" kind</strong><br>
+      F841 (a value computed and then dropped) joined the bug-class gate; the intake-kind set is parsed from five files and compared; the two MCP surfaces' tool annotations are compared by parsing the worker.</li>
+    <li class="done"><strong>Zero open code-scanning alerts</strong><br>
+      Two were real: a test that built a program out of a string. The fix was not to dismiss them but to make the thing under test a file that can be analysed — the classifier is now a module the workflow <code>require</code>s and the test imports.</li>
+    <li class="fail"><strong>Still open, and named</strong> <span>not hidden in a backlog</span><br>
+      The relevance multiplier (0.60) is untouched. TDQS 4.4 is short of the 4.6 the plan targets. And a benchmark change shipped today did not reach its own exit criterion: two production hit@1 rows it was written for still miss — the note recording that says so in the same words.</li>
+  </ul>
+
+  <h2>What this is worth</h2>
+
+  <p>#13 of 2,074 is a placement in a list that is rebuilt every week, computed partly from a keyword. Two things about it are worth recording anyway.</p>
+
+  <p>First, <strong>the measurement was checkable</strong>. Every number in this post comes from a public page or a command someone can re-run; the gap between 85.3 and 51.2 is a published formula, not a mystery. Most "we were recognized" posts cannot say that.</p>
+
+  <p>Second, <strong>the thing that moved was not marketing</strong>. The score went up because eleven tools started telling clients what they do to the world, and a test now keeps them telling it. If the list had stayed at 4.2 while the annotations were correct, that would have been the more interesting outcome — and it would have been the one I wrote up instead.</p>
+
+  <p><em>The list: <a href="https://glama.ai/mcp/best/github">glama.ai/mcp/best/github</a> · the server page: <a href="https://glama.ai/mcp/servers/Ikalus1988/MisakaNet">glama.ai/mcp/servers/Ikalus1988/MisakaNet</a> · the repository: <a href="https://github.com/Ikalus1988/MisakaNet">github.com/Ikalus1988/MisakaNet</a></em></p>
+</div>
+</body>
+</html>
