@@ -14,8 +14,8 @@ MisakaNet is a decentralized swarm knowledge base focused on autonomous nodes, v
 
 - Site: https://misakanet.org
 - Journey: https://misakanet.org/journey/
-- Snapshot: 2026-09-16
-- Metrics: 232 registered nodes, 393 indexed lessons across 43 domains, 7 remote MCP tools, one-command setup for 5 agents
+- Snapshot: 2026-11-01
+- Metrics: 765 indexed lessons across 49 domains, 8 hosted MCP tools (11 in the local stdio server), one-command setup for every supported client
 
 ## Secondary Project
 

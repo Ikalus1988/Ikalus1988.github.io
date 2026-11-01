@@ -2,7 +2,7 @@
   "schema_version": "misaka-manifest-v2",
   "developer": "Ikalus1988",
   "core_identity": "Auditable Knowledge Systems Builder",
-  "last_updated": "2026-07-29",
+  "last_updated": "2026-11-01",
   "focus": [
     "Swarm Intelligence",
     "Industrial RAG",
@@ -24,7 +24,7 @@
     "machine_spec": "https://misakanet.org/journey/scenario_191.json",
     "metrics": {
       "nodes": "235+ Registered Nodes",
-      "lessons": "244 Indexed Lessons",
+      "lessons": "765 Indexed Lessons",
       "status": "Active Sandbox"
     },
     "snapshot": {
